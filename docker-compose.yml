@@ -1,0 +1,19 @@
+version: '3.8'
+
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: smartdelivery
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: smartdelivery
+    ports:
+      -  "5433:5432"
+    volumes:
+      -  pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
