@@ -16,9 +16,15 @@ public class CreateCustomerUseCase {
 
     @Transactional
     public void execute(CustomerEntity customerEntity){
+        // Url (API externa) para busca de informações via CEP
         String url = "https://viacep.com.br/ws/"+customerEntity.getZipCode()+"/json/";
 
-        restTemplate.getForObject(url, String.class);
+        try {
+            ViaCepDTO viaCepDTO = restTemplate.getForObject(url, ViaCepDTO.class);
+            customerEntity.setAddress(viaCepDTO.logradouro());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Erro ao consultar CEP " + customerEntity.getZipCode());
+        }
 
         String jpql = "SELECT count(c) FROM CustomerEntity c WHERE c.email = :email";
         Long count = em.createQuery(jpql, Long.class)

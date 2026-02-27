@@ -1,4 +1,3 @@
 package com.fcolucasvieira.smartdelivery;
 
-public class ViaCepDTO {
-}
+public record ViaCepDTO (String cep, String logradouro) { }
