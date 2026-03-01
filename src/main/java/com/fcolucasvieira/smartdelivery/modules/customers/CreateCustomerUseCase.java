@@ -1,7 +1,6 @@
-package com.fcolucasvieira.smartdelivery;
+package com.fcolucasvieira.smartdelivery.modules.customers;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.fcolucasvieira.smartdelivery.ViaCepDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,9 +8,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CreateCustomerUseCase {
 
-    @PersistenceContext
-    private EntityManager em;
+    private CustomerRepository customerRepository;
 
+    public CreateCustomerUseCase(CustomerRepository customerRepository){
+        this.customerRepository = customerRepository;
+    }
+
+    // Substituir por práticas atuais (WebClient)
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Transactional
@@ -26,15 +29,14 @@ public class CreateCustomerUseCase {
             throw new IllegalArgumentException("Erro ao consultar CEP " + customerEntity.getZipCode());
         }
 
-        String jpql = "SELECT count(c) FROM CustomerEntity c WHERE c.email = :email";
-        Long count = em.createQuery(jpql, Long.class)
-                        .setParameter("email", customerEntity.getEmail())
-                                .getSingleResult();
+        // .ifPresent (Se presente, aplica a regra denominada sob as aspas)
+        this.customerRepository.findByEmail(customerEntity.getEmail())
+                .ifPresent(item -> {
+                    throw new IllegalArgumentException("Email já existe");
+                });
 
-        if(count > 0)
-            throw new IllegalArgumentException("Email já existe");
 
-        em.persist(customerEntity);
+        this.customerRepository.save(customerEntity);
         System.out.println(customerEntity);
 
     }

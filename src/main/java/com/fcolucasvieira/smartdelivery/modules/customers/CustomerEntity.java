@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery;
+package com.fcolucasvieira.smartdelivery.modules.customers;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

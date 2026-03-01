@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery;
+package com.fcolucasvieira.smartdelivery.modules.customers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery;
+package com.fcolucasvieira.smartdelivery.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/customers/").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/products/").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }
