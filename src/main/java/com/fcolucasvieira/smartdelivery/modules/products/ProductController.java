@@ -1,21 +1,23 @@
 package com.fcolucasvieira.smartdelivery.modules.products;
 
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;
+import com.fcolucasvieira.smartdelivery.modules.products.dto.ListProductResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     CreateProductUseCase createProductUseCase;
+    ProductService productService;
 
-    public ProductController(CreateProductUseCase createProductUseCase){
+    public ProductController(CreateProductUseCase createProductUseCase, ProductService productService){
         this.createProductUseCase = createProductUseCase;
+        this.productService = productService;
     }
 
     @PostMapping("/")
@@ -26,5 +28,10 @@ public class ProductController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/")
+    public List<ListProductResponse> findAll() {
+        return this.productService.findAll();
     }
 }

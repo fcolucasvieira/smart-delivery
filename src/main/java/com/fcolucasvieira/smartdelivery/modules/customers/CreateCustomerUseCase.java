@@ -35,7 +35,6 @@ public class CreateCustomerUseCase {
                     throw new IllegalArgumentException("Email já existe");
                 });
 
-
         this.customerRepository.save(customerEntity);
         System.out.println(customerEntity);
 

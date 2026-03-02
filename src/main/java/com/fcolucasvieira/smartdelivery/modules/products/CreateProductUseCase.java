@@ -14,7 +14,7 @@ public class CreateProductUseCase {
         this.productRepository = productRepository;
     }
 
-    public CreateProductResponse execute(CreateProductRequest createProductRequest){
+    public CreateProductResponse execute(CreateProductRequest createProductRequest) {
         this.productRepository.findByCode(createProductRequest.code())
                 .ifPresent(product -> {
                     throw new IllegalArgumentException("Produto já existe");
