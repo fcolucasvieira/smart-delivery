@@ -19,9 +19,9 @@ public class CustomerController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> create(@RequestBody CustomerEntity customerEntity){
+    public ResponseEntity<?> create(@RequestBody CreateCustomerRequest createCustomerRequest){
         try {
-            createCustomerUseCase.execute(customerEntity);
+            createCustomerUseCase.execute(createCustomerRequest);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());

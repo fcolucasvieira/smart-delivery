@@ -1,5 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.customers;
 
+import com.fcolucasvieira.smartdelivery.modules.users.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,19 +27,16 @@ public class CustomerEntity {
     private String email;
 
     private String address;
-    private String password;
 
     private String zipCode;
 
-    @Override
-    public String toString() {
-        return "CustomerEntity{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                '}';
-    }
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserEntity user;
+
 }
 
 
