@@ -3,6 +3,7 @@ package com.fcolucasvieira.smartdelivery.modules.customers;
 import com.fcolucasvieira.smartdelivery.ViaCepDTO;
 import com.fcolucasvieira.smartdelivery.modules.users.CreateUserUseCase;
 import com.fcolucasvieira.smartdelivery.modules.users.Role;
+import com.fcolucasvieira.smartdelivery.modules.users.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +31,8 @@ public class CreateCustomerUseCase {
 
         CustomerEntity customerEntity = new CustomerEntity();
 
+        // Através da rota (API externa), gera instância ViaCepDTO e guarda CEP e logradouro
+        // Insere sobre a instância customerEntity o address (logradouro de ViaCepDTO)
         try {
             ViaCepDTO viaCepDTO = restTemplate.getForObject(url, ViaCepDTO.class);
             customerEntity.setAddress(viaCepDTO.logradouro());
@@ -37,14 +40,18 @@ public class CreateCustomerUseCase {
             throw new IllegalArgumentException("Erro ao consultar CEP " + createCustomerRequest.zipCode());
         }
 
-            this.createUserUseCase.execute(createCustomerRequest.email(), createCustomerRequest.password(), Role.CUSTOMER);
+        // Cadastra usuário de role CUSTOMER (table users)
+        UserEntity userEntity = this.createUserUseCase.execute(createCustomerRequest.email(), createCustomerRequest.password(), Role.CUSTOMER);
 
+        // Seta dados sobre a instância customerEntity através de createCustomerRequest e userEntity
         customerEntity.setName(createCustomerRequest.name());
         customerEntity.setPhone(createCustomerRequest.phone());
         customerEntity.setEmail(createCustomerRequest.email());
         customerEntity.setZipCode(createCustomerRequest.zipCode());
+        customerEntity.setUserId(userEntity.getId());
 
         // .ifPresent (Se presente, aplica a regra denominada sob as aspas)
+        // Neste caso, se existir um customer com este email setado, aplica exceção
         this.customerRepository.findByEmail(customerEntity.getEmail())
                 .ifPresent(item -> {
                     throw new IllegalArgumentException("Email já existe");

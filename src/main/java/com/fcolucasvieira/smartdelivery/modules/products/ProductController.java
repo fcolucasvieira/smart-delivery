@@ -4,6 +4,7 @@ import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductReques
 import com.fcolucasvieira.smartdelivery.modules.products.dto.ListProductResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,11 @@ public class ProductController {
         this.productService = productService;
     }
 
+
+    // @PreAuthorize() - Útil para permitir/negar rota através de verificações iniciais
+    // Nesse caso, a verificação inicial foi o usuário logado ter role ADMIN
     @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody CreateProductRequest createProductRequest){
         try {
             var productCreated = this.createProductUseCase.execute(createProductRequest);
