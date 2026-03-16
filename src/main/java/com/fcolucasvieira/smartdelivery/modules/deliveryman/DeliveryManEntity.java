@@ -25,10 +25,13 @@ public class DeliveryManEntity {
 
     private String phone;
 
-    private DeliveryManEntity(String name, String document, String phone) {
+    private boolean isAvailable;
+
+    private DeliveryManEntity(String name, String document, String phone, boolean isAvailable) {
         this.name = name;
         this.document = document;
         this.phone = phone;
+        this.isAvailable = isAvailable;
     }
 
     // Annotation - @Builder
@@ -36,6 +39,7 @@ public class DeliveryManEntity {
         private String name;
         private String document;
         private String phone;
+        private boolean isAvailable;
 
         public Builder name(String name){
             this.name = name;
@@ -52,8 +56,13 @@ public class DeliveryManEntity {
             return this;
         }
 
+        public Builder isAvailable(boolean isAvailable){
+            this.isAvailable = isAvailable;
+            return this;
+        }
+
         public DeliveryManEntity build(){
-            return new DeliveryManEntity(name, document, phone);
+            return new DeliveryManEntity(name, document, phone, isAvailable);
         }
     }
 }
