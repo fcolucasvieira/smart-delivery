@@ -24,7 +24,7 @@ public class CreateDeliveryManUseCase {
                 .name(request.name())
                 .document(request.document())
                 .phone(request.phone())
-                .isAvailiable(true)
+                .isAvailable(true)
                 .build();
 
         this.deliveryManRepository.save(deliveryManEntity);

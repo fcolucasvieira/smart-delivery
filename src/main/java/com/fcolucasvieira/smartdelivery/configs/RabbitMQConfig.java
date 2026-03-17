@@ -10,11 +10,14 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     public static final String QUEUE_ORDER_CREATED = "pedido-criado";
 
+
+    // Gera fila (RabbitMQ) ao iniciar aplicação (durável)
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_ORDER_CREATED, true);
     }
 
+    // Configura conversão automática entre objetos Java e JSON nas mensagens
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new JacksonJsonMessageConverter();

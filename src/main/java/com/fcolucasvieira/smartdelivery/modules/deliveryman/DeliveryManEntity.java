@@ -25,6 +25,7 @@ public class DeliveryManEntity {
 
     private String phone;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT true")
     private boolean isAvailable;
 
     private DeliveryManEntity(String name, String document, String phone, boolean isAvailable) {

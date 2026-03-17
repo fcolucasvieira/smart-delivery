@@ -1,6 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.orders;
 
 import com.fcolucasvieira.smartdelivery.modules.customers.CustomerEntity;
+import com.fcolucasvieira.smartdelivery.modules.deliveryman.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.products.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,13 @@ public class OrderEntity {
             inverseJoinColumns = @JoinColumn(name = "products_id")
     )
     private List<ProductEntity> products;
+
+    @Column(name = "deliveryMan_id")
+    private UUID deliveryManId;
+
+    @ManyToOne
+    @JoinColumn(name = "deliveryMan_id", insertable = false, updatable = false)
+    private DeliveryManEntity deliveryMan;
 
     @Enumerated(EnumType.STRING)
     private StatusOrder status = StatusOrder.CRIADO;
