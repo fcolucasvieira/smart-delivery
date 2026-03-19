@@ -1,6 +1,5 @@
 package com.fcolucasvieira.smartdelivery.modules.products;
 
-import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

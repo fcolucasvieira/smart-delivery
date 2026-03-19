@@ -31,9 +31,12 @@ public class CreateDeliveryOrderUseCase {
 
         // List de DeliveryManEntity onde parâmetro isAvailable = true
         List<DeliveryManEntity> deliveryManEntities = this.deliveryManRepository.findByIsAvailable(true);
+
+        // Implementar Dead Letter Queue (DLQ) e Retry
         if(deliveryManEntities.isEmpty()){
             System.out.println("Nenhum deliveryman encontrado! " + orderId);
         }
+
 
         // Instancia um deliveryManEntity através da primeira ocorrência de deliveryManEntities
         DeliveryManEntity firstDeliveryManEntity = deliveryManEntities.getFirst();

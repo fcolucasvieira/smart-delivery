@@ -18,4 +18,9 @@ spring:
     password: id3Ue5Xkoh0smE6pGrXrZgtPKWesB-CP
     virtual-host: cfrtbfpc
 
+feign:
+  client:
+    config:
+      viacep-service:
+        url: https://viacep.com.br/ws/
 

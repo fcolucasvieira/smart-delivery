@@ -1,6 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.customers;
 
 import com.fcolucasvieira.smartdelivery.ViaCepDTO;
+import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCEPClient;
 import com.fcolucasvieira.smartdelivery.modules.users.CreateUserUseCase;
 import com.fcolucasvieira.smartdelivery.modules.users.Role;
 import com.fcolucasvieira.smartdelivery.modules.users.UserEntity;
@@ -13,28 +14,28 @@ public class CreateCustomerUseCase {
 
     private CustomerRepository customerRepository;
     private CreateUserUseCase createUserUseCase;
+    private ViaCEPClient viaCEPClient;
 
-    public CreateCustomerUseCase(CustomerRepository customerRepository, CreateUserUseCase createUserUseCase){
+    public CreateCustomerUseCase(CustomerRepository customerRepository, CreateUserUseCase createUserUseCase, ViaCEPClient viaCEPClient) {
         this.customerRepository = customerRepository;
         this.createUserUseCase = createUserUseCase;
+        this.viaCEPClient = viaCEPClient;
     }
 
-    // Substituir por práticas atuais (WebClient)
     private final RestTemplate restTemplate = new RestTemplate();
 
     // @Transactional - O metodo só implementa as persistências do banco de dados caso todas sejam efetivadas
     // Neste caso, mesmo que save User aconteça antes do fim do metodo, ele só será efetivado após o save Customer
     @Transactional
     public void execute(CreateCustomerRequest createCustomerRequest){
-        // Url (API externa) para busca de informações via CEP
-        String url = "https://viacep.com.br/ws/"+createCustomerRequest.zipCode()+"/json/";
+        // Uso de OpenFeign (Spring Cloud)
+        // Através da rota (API externa), gera instância ViaCepDTO e guarda CEP e logradouro
+        ViaCepDTO viaCepDTO = this.viaCEPClient.findZipCode(createCustomerRequest.zipCode());
 
         CustomerEntity customerEntity = new CustomerEntity();
 
-        // Através da rota (API externa), gera instância ViaCepDTO e guarda CEP e logradouro
         // Insere sobre a instância customerEntity o address (logradouro de ViaCepDTO)
         try {
-            ViaCepDTO viaCepDTO = restTemplate.getForObject(url, ViaCepDTO.class);
             customerEntity.setAddress(viaCepDTO.logradouro());
         } catch (Exception ex) {
             throw new IllegalArgumentException("Erro ao consultar CEP " + createCustomerRequest.zipCode());
