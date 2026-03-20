@@ -16,7 +16,7 @@ public class CreateUserUseCase {
     public UserEntity execute(String username, String password, Role role){
         this.userRepository.findByUsername(username)
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException("Usuário já cadastrado");
+                    throw new IllegalArgumentException("Usuário já cadastrado.");
                 });
 
         UserEntity user = new UserEntity(

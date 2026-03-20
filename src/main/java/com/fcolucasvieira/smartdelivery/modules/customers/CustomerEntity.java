@@ -21,6 +21,7 @@ public class CustomerEntity {
     private UUID id;
 
     private String name;
+
     private String phone;
 
     @Column(unique = true)
@@ -37,6 +38,13 @@ public class CustomerEntity {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
+    // Construtor para CustomerMapper.toEntity()
+    public CustomerEntity(String name, String phone, String zipCode, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.zipCode = zipCode;
+        this.email = email;
+    }
 }
 
 
