@@ -1,7 +1,8 @@
 package com.fcolucasvieira.smartdelivery.modules.products.dto;
 
-public record ListProductResponse(int code,
+import java.math.BigDecimal;
+
+public record ListProductResponse(String name,
                                   String description,
-                                  String name,
-                                  double price) {
+                                  BigDecimal price) {
 }

@@ -1,6 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.dto;
 
-import java.util.List;
-import java.util.UUID;
+import com.fcolucasvieira.smartdelivery.modules.orders.OrderItemEntity;
 
-public record CreateOrderRequest(List<UUID> productsIds) {}
+import java.util.List;
+
+public record CreateOrderRequest(List<OrderItemRequest> items) {}

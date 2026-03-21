@@ -15,11 +15,6 @@ public class CreateProductUseCase {
     }
 
     public CreateProductResponse execute(CreateProductRequest createProductRequest) {
-        this.productRepository.findByCode(createProductRequest.code())
-                .ifPresent(product -> {
-                    throw new IllegalArgumentException("Produto já existe.");
-                });
-
         ProductEntity productEntity = ProductMapper.toEntity(createProductRequest);
 
         this.productRepository.save(productEntity);

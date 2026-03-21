@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "products")
@@ -19,13 +20,13 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private int code;
     private String name;
-    private String description;
-    private double price;
 
-    public ProductEntity(int code, String name, String description, double price){
-        this.code = code;
+    private String description;
+
+    private BigDecimal price;
+
+    public ProductEntity(String name, String description, BigDecimal price){
         this.name = name;
         this.description = description;
         this.price = price;

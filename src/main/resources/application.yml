@@ -2,6 +2,10 @@ spring:
   application:
     name: smartdelivery
 
+  config:
+    import: optional:file:.env[.properties]
+
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
@@ -23,4 +27,5 @@ feign:
     config:
       viacep-service:
         url: https://viacep.com.br/ws/
+
 

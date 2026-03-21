@@ -17,11 +17,12 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
     private String phone;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String email;
 
     private String address;

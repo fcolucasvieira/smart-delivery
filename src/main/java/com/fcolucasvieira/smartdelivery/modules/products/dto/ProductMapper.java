@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 public class ProductMapper {
     public static ProductEntity toEntity(CreateProductRequest createProductRequest) {
         return new ProductEntity(
-                createProductRequest.code(),
                 createProductRequest.name(),
                 createProductRequest.description(),
                 createProductRequest.price());
@@ -16,17 +15,15 @@ public class ProductMapper {
 
     public static CreateProductResponse toResponse(ProductEntity productEntity) {
         return new CreateProductResponse(
-                productEntity.getCode(),
-                productEntity.getName(),
-                productEntity.getId());
+                productEntity.getId(),
+                productEntity.getName());
     }
 
     public static List<ListProductResponse> toListResponse(List<ProductEntity> productEntities) {
         return productEntities.stream()
                 .map(product -> new ListProductResponse(
-                        product.getCode(),
-                        product.getDescription(),
                         product.getName(),
+                        product.getDescription(),
                         product.getPrice()
                 ))
                 .collect(Collectors.toList());

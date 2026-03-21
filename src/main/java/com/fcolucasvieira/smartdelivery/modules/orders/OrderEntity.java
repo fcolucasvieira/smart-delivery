@@ -2,13 +2,13 @@ package com.fcolucasvieira.smartdelivery.modules.orders;
 
 import com.fcolucasvieira.smartdelivery.modules.customers.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.DeliveryManEntity;
-import com.fcolucasvieira.smartdelivery.modules.products.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,35 +23,30 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "customer_id")
+    @Column(name = "customer_id", nullable = false)
     private UUID customerId;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private CustomerEntity customer;
 
-    @ManyToMany
-    @JoinTable(
-            name = "orders_products",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id")
-    )
-    private List<ProductEntity> products;
-
-    @Column(name = "deliveryMan_id")
+    @Column(name = "delivery_man_id")
     private UUID deliveryManId;
 
-    @ManyToOne
-    @JoinColumn(name = "deliveryMan_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_man_id", insertable = false, updatable = false)
     private DeliveryManEntity deliveryMan;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusOrder status = StatusOrder.CRIADO;
 
-    public OrderEntity(UUID customerId, CustomerEntity customer, List<ProductEntity> products, StatusOrder status) {
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemEntity> items = new ArrayList<>();
+
+    public OrderEntity(UUID customerId, CustomerEntity customer, StatusOrder status) {
         this.customerId = customerId;
         this.customer = customer;
-        this.products = products;
         this.status = status;
     }
 }
