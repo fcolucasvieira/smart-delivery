@@ -2,21 +2,21 @@ spring:
   application:
     name: smartdelivery
 
-
   datasource:
-    url: jdbc:postgresql://localhost:5433/smartdelivery
-    username: admin
-    password: admin
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
   rabbitmq:
-    addresses: amqps://cfrtbfpc:id3Ue5Xkoh0smE6pGrXrZgtPKWesB-CP@stingray.rmq.cloudamqp.com/cfrtbfpc
-    username: cfrtbfpc
-    password: id3Ue5Xkoh0smE6pGrXrZgtPKWesB-CP
-    virtual-host: cfrtbfpc
+    addresses: ${RABBITMQ_URL}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: ${RABBITMQ_VHOST}
 
 feign:
   client:

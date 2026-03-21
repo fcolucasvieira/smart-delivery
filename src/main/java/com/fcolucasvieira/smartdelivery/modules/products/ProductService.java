@@ -18,6 +18,6 @@ public class ProductService {
         // List<ProductEntity>
         var products = this.productRepository.findAll();
         // List<ListProductResponse>
-        return ProductMapper.toResponse(products);
+        return ProductMapper.toListResponse(products);
     }
 }

@@ -17,12 +17,12 @@ public class CreateProductUseCase {
     public CreateProductResponse execute(CreateProductRequest createProductRequest) {
         this.productRepository.findByCode(createProductRequest.code())
                 .ifPresent(product -> {
-                    throw new IllegalArgumentException("Produto já existe");
+                    throw new IllegalArgumentException("Produto já existe.");
                 });
 
-        ProductEntity productEntity = ProductMapper.requestToEntity(createProductRequest);
+        ProductEntity productEntity = ProductMapper.toEntity(createProductRequest);
 
         this.productRepository.save(productEntity);
-        return ProductMapper.entityToResponse(productEntity);
+        return ProductMapper.toResponse(productEntity);
     }
 }
