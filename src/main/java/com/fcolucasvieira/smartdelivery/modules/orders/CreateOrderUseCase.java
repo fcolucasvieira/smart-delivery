@@ -36,28 +36,48 @@ public class CreateOrderUseCase {
     }
 
     @Transactional
-    public CreateOrderResponse execute(CreateOrderRequest createOrderRequest) {
-        // Instancia o username logado através do contexto de segurança da aplicação (Auth Basic)
+    public CreateOrderResponse execute(CreateOrderRequest request) {
+        CustomerEntity customer = getAuthenticatedCustomer();
+
+        OrderEntity order = createOrder(customer);
+
+        List<OrderItemEntity> items = buildOrderItems(order, request);
+
+        order.setItems(items);
+        order = this.orderRepository.save(order);
+
+        publishEvent(order);
+
+        return buildResponse(order);
+    }
+
+    private CustomerEntity getAuthenticatedCustomer(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // .get() - Assume que a busca feita, existe
-        // Instancia userEntity através de username
-        UserEntity userEntity = this.userRepository.findByUsername(username).get();
+        UserEntity user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Através de userEntity, instancia customerEntity
-        CustomerEntity customerEntity = this.customerRepository.findByUserId(userEntity.getId()).get();
+        return this.customerRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+    }
 
+    private OrderEntity createOrder(CustomerEntity customer){
         OrderEntity order = new OrderEntity();
-        order.setCustomerId(customerEntity.getId());
+        order.setCustomerId(customer.getId());
 
-        order = orderRepository.save(order);
+        return this.orderRepository.save(order);
+    }
+
+    private List<OrderItemEntity> buildOrderItems(OrderEntity order, CreateOrderRequest request) {
+        if(request.items() == null || request.items().isEmpty()) {
+            throw new IllegalArgumentException("Order must have at least one item");
+        }
 
         List<OrderItemEntity> items = new ArrayList<>();
-
-        for(OrderItemRequest itemRequest : createOrderRequest.items()){
-            ProductEntity product = productRepository
+        for(OrderItemRequest itemRequest : request.items()){
+            ProductEntity product = this.productRepository
                     .findById(itemRequest.productId())
-                    .orElseThrow();
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
 
             OrderItemEntity item = new OrderItemEntity();
             item.setOrderId(order.getId());
@@ -68,14 +88,20 @@ public class CreateOrderUseCase {
             items.add(item);
         }
 
-        order.setItems(items);
-        orderRepository.save(order);
+        return items;
+    }
 
-        // Publica um evento de "pedido criado" no RabbitMQ para processamento assíncrono por outros serviços.
+    private void publishEvent(OrderEntity order){
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.QUEUE_ORDER_CREATED,
-                new OrderEvent(order.getId().toString()));
+                new OrderEvent(order.getId().toString())
+        );
+    }
 
-        return new CreateOrderResponse(order.getId(), order.getStatus().toString());
+    private CreateOrderResponse buildResponse(OrderEntity order){
+        return new CreateOrderResponse(
+                order.getId(),
+                order.getStatus().toString()
+        );
     }
 }

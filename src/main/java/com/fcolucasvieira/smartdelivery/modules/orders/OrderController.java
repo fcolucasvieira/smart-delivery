@@ -12,11 +12,11 @@ import java.util.UUID;
 public class OrderController {
 
     private CreateOrderUseCase createOrderUseCase;
-    private DeliveredUseCase deliveredUseCase;
+    private CompleteOrderUseCase completeOrderUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase, DeliveredUseCase deliveredUseCase) {
+    public OrderController(CreateOrderUseCase createOrderUseCase, CompleteOrderUseCase completeOrderUseCase) {
         this.createOrderUseCase = createOrderUseCase;
-        this.deliveredUseCase = deliveredUseCase;
+        this.completeOrderUseCase = completeOrderUseCase;
     }
 
     @PostMapping("/")
@@ -24,10 +24,12 @@ public class OrderController {
         return this.createOrderUseCase.execute(createOrderRequest);
     }
 
+
+
     @PutMapping("/delivered/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
     public String delivered(@PathVariable UUID orderId){
-        this.deliveredUseCase.execute(orderId);
+        this.completeOrderUseCase.execute(orderId);
         return "Pedido entregue com sucesso!";
     }
 }

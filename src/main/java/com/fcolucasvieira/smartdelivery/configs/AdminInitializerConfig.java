@@ -3,6 +3,7 @@ package com.fcolucasvieira.smartdelivery.configs;
 import com.fcolucasvieira.smartdelivery.modules.users.CreateUserUseCase;
 import com.fcolucasvieira.smartdelivery.modules.users.Role;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 // (Configuration) - Inicializar Admin da aplicação
@@ -14,7 +15,7 @@ public class AdminInitializerConfig {
     public CommandLineRunner initAdmin(CreateUserUseCase createUserUseCase){
         return args -> {
             createUserUseCase.execute(
-                    "admin@samrtdelivery.com",
+                    "admin@smartdelivery.com",
                     "admin123",
                     Role.ADMIN
             );
