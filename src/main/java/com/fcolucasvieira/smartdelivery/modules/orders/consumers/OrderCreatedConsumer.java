@@ -17,15 +17,14 @@ public class OrderCreatedConsumer {
         this.assignDeliveryManToOrderUseCase = assignDeliveryManToOrderUseCase;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE_ORDER_CREATED)
+    @RabbitListener(
+            queues = RabbitMQConfig.QUEUE_ORDER_CREATED,
+            containerFactory = "customRabbitListenerContainerFactory"
+    )
     public void listener(OrderEvent event){
         System.out.println("Chegou a mensagem");
         System.out.println("ID: " + event.id());
 
-        try {
-            this.assignDeliveryManToOrderUseCase.execute(UUID.fromString(event.id()));
-        } catch (Exception ex){
-            System.err.println("Error processing order: " + ex.getMessage());
-        }
+        this.assignDeliveryManToOrderUseCase.execute(UUID.fromString(event.id()));
     }
 }

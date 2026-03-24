@@ -93,7 +93,8 @@ public class CreateOrderUseCase {
 
     private void publishEvent(OrderEntity order){
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.QUEUE_ORDER_CREATED,
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY,
                 new OrderEvent(order.getId().toString())
         );
     }
