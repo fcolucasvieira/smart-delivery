@@ -24,12 +24,10 @@ public class OrderController {
         return this.createOrderUseCase.execute(createOrderRequest);
     }
 
-
-
     @PutMapping("/delivered/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
     public String delivered(@PathVariable UUID orderId){
         this.completeOrderUseCase.execute(orderId);
-        return "Pedido entregue com sucesso!";
+        return "Order delivered successfully!";
     }
 }

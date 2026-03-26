@@ -16,9 +16,11 @@ public class RabbitMQConfig {
 
     public static final String QUEUE_ORDER_CREATED = "pedido-criado";
     public static final String QUEUE_ORDER_CREATED_DLQ = "pedido-criado-dlq";
+    public static final String QUEUE_ORDER_CREATED_RETRY = "pedido-criado-retry";
 
     public static final String ROUTING_KEY = "pedido.criado";
     public static final String ROUTING_KEY_DLQ = "pedido.criado.dlq";
+    public static final String ROUTING_KEY_RETRY = "pedido.criado.retry";
 
     // Exchange
     @Bean
@@ -26,7 +28,7 @@ public class RabbitMQConfig {
         return new DirectExchange(EXCHANGE);
     }
 
-    // Fila principal
+    // Fila principal onde os pedidos são processados
     @Bean
     public Queue orderCreatedQueue() {
         return QueueBuilder.durable(QUEUE_ORDER_CREATED)
@@ -39,6 +41,16 @@ public class RabbitMQConfig {
     @Bean
     public Queue orderCreatedDLQ() {
         return QueueBuilder.durable(QUEUE_ORDER_CREATED_DLQ).build();
+    }
+
+    // Fila de retry: segura a mensagem por 5s antes de reenviar
+    @Bean
+    public Queue orderCreatedRetry() {
+        return QueueBuilder.durable(QUEUE_ORDER_CREATED_RETRY)
+                .withArgument("x-message-ttl", 5000)
+                .withArgument("x-dead-letter-exchange", EXCHANGE)
+                .withArgument("x-dead-letter-routing-key", ROUTING_KEY)
+                .build();
     }
 
     // Binding fila principal
@@ -57,6 +69,15 @@ public class RabbitMQConfig {
                 .bind(orderCreatedDLQ())
                 .to(exchange())
                 .with(ROUTING_KEY_DLQ);
+    }
+
+    // Binding retry
+    @Bean
+    public Binding bindingRetry() {
+        return BindingBuilder
+                .bind(orderCreatedRetry())
+                .to(exchange())
+                .with(ROUTING_KEY_RETRY);
     }
 
     @Bean
