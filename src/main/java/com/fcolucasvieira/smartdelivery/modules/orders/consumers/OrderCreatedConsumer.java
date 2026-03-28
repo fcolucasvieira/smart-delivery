@@ -3,6 +3,7 @@ package com.fcolucasvieira.smartdelivery.modules.orders.consumers;
 import com.fcolucasvieira.smartdelivery.configs.RabbitMQConfig;
 import com.fcolucasvieira.smartdelivery.modules.orders.AssignDeliveryManToOrderUseCase;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.OrderEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.Header;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class OrderCreatedConsumer {
 
@@ -30,16 +32,20 @@ public class OrderCreatedConsumer {
             OrderEvent event,
             @Header(name = "x-retry-count", required = false) Integer retryCount
     ) {
-        System.out.println("Chegou a mensagem");
-        System.out.println("ID: " + event.id());
+
+        log.info("Mensagem recebida da fila. OrderId: {}", event.id());
 
         try {
+
             this.assignDeliveryManToOrderUseCase.execute(UUID.fromString(event.id()));
-        } catch (Exception ex) {
+            log.info("Pedido {} processado com sucesso", event.id());
+
+        } catch (IllegalStateException ex) {
+
             int currentRetry = (retryCount == null) ? 0 : retryCount;
 
             if(currentRetry < 3){
-                System.out.println("Retry tentativa: " + (currentRetry + 1));
+                log.warn("Sem entregador disponível para pedido {}. Tentativa {}", event.id(), currentRetry + 1);
 
                 rabbitTemplate.convertAndSend(
                         RabbitMQConfig.EXCHANGE,
@@ -52,10 +58,16 @@ public class OrderCreatedConsumer {
                         }
                 );
             } else {
-                System.out.println("Enviando para DLQ após 3 tentativas");
-
+                log.error("Pedido {} falhou após 3 tentativas. Enviando para DLQ", event.id(), ex);
                 throw ex;
             }
+
+        } catch (IllegalArgumentException ex){
+            log.error("Erro de dados inválidos no pedido {}. Enviando direto para DLQ", event.id(), ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Erro inesperado no pedido {}. Enviando para DLQ", event.id(), ex);
+            throw ex;
         }
     }
 }

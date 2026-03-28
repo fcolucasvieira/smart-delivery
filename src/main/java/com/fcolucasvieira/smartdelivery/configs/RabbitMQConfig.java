@@ -37,12 +37,6 @@ public class RabbitMQConfig {
                 .build();
     }
 
-    // Fila DLQ
-    @Bean
-    public Queue orderCreatedDLQ() {
-        return QueueBuilder.durable(QUEUE_ORDER_CREATED_DLQ).build();
-    }
-
     // Fila de retry: segura a mensagem por 5s antes de reenviar
     @Bean
     public Queue orderCreatedRetry() {
@@ -53,6 +47,13 @@ public class RabbitMQConfig {
                 .build();
     }
 
+    // Fila DLQ
+    @Bean
+    public Queue orderCreatedDLQ() {
+        return QueueBuilder.durable(QUEUE_ORDER_CREATED_DLQ).build();
+    }
+
+
     // Binding fila principal
     @Bean
     public Binding binding() {
@@ -62,15 +63,6 @@ public class RabbitMQConfig {
                 .with(ROUTING_KEY);
     }
 
-    // Binding DLQ
-    @Bean
-    public Binding bindingDLQ() {
-        return BindingBuilder
-                .bind(orderCreatedDLQ())
-                .to(exchange())
-                .with(ROUTING_KEY_DLQ);
-    }
-
     // Binding retry
     @Bean
     public Binding bindingRetry() {
@@ -78,6 +70,15 @@ public class RabbitMQConfig {
                 .bind(orderCreatedRetry())
                 .to(exchange())
                 .with(ROUTING_KEY_RETRY);
+    }
+
+    // Binding DLQ
+    @Bean
+    public Binding bindingDLQ() {
+        return BindingBuilder
+                .bind(orderCreatedDLQ())
+                .to(exchange())
+                .with(ROUTING_KEY_DLQ);
     }
 
     @Bean

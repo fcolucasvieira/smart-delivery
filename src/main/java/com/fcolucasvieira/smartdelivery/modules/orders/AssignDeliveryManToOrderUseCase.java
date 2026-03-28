@@ -20,10 +20,14 @@ public class AssignDeliveryManToOrderUseCase {
         this.orderRepository = orderRepository;
     }
 
-    // Implementar Dead Letter Queue (DLQ) e Retry
     @Transactional
     public void execute(UUID orderId){
         OrderEntity order = getOrder(orderId);
+
+        // Idempotência (caso de deliveryMan já designado à order)
+        if(isAlreadyAssigned(order)) {
+            return;
+        }
 
         DeliveryManEntity deliveryMan = findFirstAvailableDeliveryMan();
 
@@ -35,6 +39,11 @@ public class AssignDeliveryManToOrderUseCase {
     private OrderEntity getOrder(UUID orderId){
         return this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found " + orderId));
+    }
+
+    private boolean isAlreadyAssigned(OrderEntity order) {
+        return order.getDeliveryManId() != null
+                && order.getStatus() == StatusOrder.EM_ROTA;
     }
 
     private DeliveryManEntity findFirstAvailableDeliveryMan(){
