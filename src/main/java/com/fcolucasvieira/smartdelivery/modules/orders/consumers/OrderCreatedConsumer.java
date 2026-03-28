@@ -1,7 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.consumers;
 
 import com.fcolucasvieira.smartdelivery.configs.RabbitMQConfig;
-import com.fcolucasvieira.smartdelivery.modules.orders.AssignDeliveryManToOrderUseCase;
+import com.fcolucasvieira.smartdelivery.modules.orders.usecases.AssignDeliveryManToOrderUseCase;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.OrderEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
