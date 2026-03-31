@@ -2,32 +2,36 @@ package com.fcolucasvieira.smartdelivery.modules.products.mapper;
 
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductResponse;
+import com.fcolucasvieira.smartdelivery.modules.products.dto.ListProductResponse;
 import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductMapper {
-    public static ProductEntity toEntity(CreateProductRequest createProductRequest) {
-        return new ProductEntity(
-                createProductRequest.name(),
-                createProductRequest.description(),
-                createProductRequest.price());
+    public static ProductEntity toEntity(CreateProductRequest request) {
+        return ProductEntity.builder()
+                .name(request.name())
+                .description(request.description())
+                .price(request.price())
+                .build();
     }
 
-    public static CreateProductResponse toResponse(ProductEntity productEntity) {
-        return new CreateProductResponse(
-                productEntity.getId(),
-                productEntity.getName());
+    public static CreateProductResponse toResponse(ProductEntity product) {
+        return CreateProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .build();
     }
 
     public static List<ListProductResponse> toListResponse(List<ProductEntity> productEntities) {
         return productEntities.stream()
-                .map(product -> new ListProductResponse(
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice()
-                ))
+                .map(product -> ListProductResponse.builder()
+                        .name(product.getName())
+                        .description(product.getDescription())
+                        .price(product.getPrice())
+                        .build()
+                )
                 .collect(Collectors.toList());
     }
 }

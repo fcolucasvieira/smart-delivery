@@ -1,16 +1,15 @@
 package com.fcolucasvieira.smartdelivery.modules.products.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "products")
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,11 +23,6 @@ public class ProductEntity {
 
     private String description;
 
+    @Positive
     private BigDecimal price;
-
-    public ProductEntity(String name, String description, BigDecimal price){
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
 }

@@ -1,24 +1,21 @@
 package com.fcolucasvieira.smartdelivery.modules.products.usecases;
 
-import com.fcolucasvieira.smartdelivery.modules.products.mapper.ListProductResponse;
+import com.fcolucasvieira.smartdelivery.modules.products.dto.ListProductResponse;
+import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
 import com.fcolucasvieira.smartdelivery.modules.products.mapper.ProductMapper;
 import com.fcolucasvieira.smartdelivery.modules.products.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ListAllProductsUseCase {
-    private ProductRepository productRepository;
+    private final ProductRepository repository;
 
-    public ListAllProductsUseCase(ProductRepository productRepository){
-        this.productRepository = productRepository;
-    }
-
-    public List<ListProductResponse> findAll() {
-        // List<ProductEntity>
-        var products = this.productRepository.findAll();
-        // List<ListProductResponse>
-        return ProductMapper.toListResponse(products);
+    public List<ListProductResponse> execute() {
+        List<ProductEntity> listProducts = this.repository.findAll();
+        return ProductMapper.toListResponse(listProducts);
     }
 }
