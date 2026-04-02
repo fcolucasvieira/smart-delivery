@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.configs;
 
-import com.fcolucasvieira.smartdelivery.modules.users.UserRepository;
+import com.fcolucasvieira.smartdelivery.modules.users.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,14 +44,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Segurança Auth Basic
+    // Segurança - Auth Basic
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByUsername(username)
                 .map(user -> User.withUsername(user.getUsername())
                         .password(user.getPassword())
-                        .roles(user.getRole().name())
-                        .build())// Builder Design Patterns
-                .orElseThrow(() -> new RuntimeException("Usuário/Senha incorretos"));
+                        .roles(user.getUserRole().name())
+                        .build())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
     }
 }

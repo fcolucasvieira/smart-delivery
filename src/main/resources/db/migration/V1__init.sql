@@ -3,7 +3,7 @@ CREATE TABLE users (
 
     username VARCHAR(150) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
+    userRole VARCHAR(50) NOT NULL,
 
     CONSTRAINT uk_users_username UNIQUE (username)
 );

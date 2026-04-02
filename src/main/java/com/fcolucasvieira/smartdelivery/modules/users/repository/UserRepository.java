@@ -1,5 +1,6 @@
-package com.fcolucasvieira.smartdelivery.modules.users;
+package com.fcolucasvieira.smartdelivery.modules.users.repository;
 
+import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

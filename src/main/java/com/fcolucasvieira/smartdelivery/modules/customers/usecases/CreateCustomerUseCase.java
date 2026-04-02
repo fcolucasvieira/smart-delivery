@@ -6,9 +6,10 @@ import com.fcolucasvieira.smartdelivery.modules.customers.dto.ViaCepDTO;
 import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCEPClient;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
 import com.fcolucasvieira.smartdelivery.modules.customers.mapper.CustomerMapper;
-import com.fcolucasvieira.smartdelivery.modules.users.CreateUserUseCase;
-import com.fcolucasvieira.smartdelivery.modules.users.Role;
-import com.fcolucasvieira.smartdelivery.modules.users.UserEntity;
+import com.fcolucasvieira.smartdelivery.modules.users.usecases.CreateUserUseCase;
+import com.fcolucasvieira.smartdelivery.modules.users.entity.enums.UserRole;
+import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
+import com.fcolucasvieira.smartdelivery.modules.users.dto.CreateUserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,14 @@ public class CreateCustomerUseCase {
             throw new IllegalArgumentException("Erro ao consultar CEP " + createCustomerRequest.zipCode());
         }
 
+        CreateUserRequest userRequest = CreateUserRequest.builder()
+                .username(createCustomerRequest.email())
+                .password(createCustomerRequest.password())
+                .userRole(UserRole.CUSTOMER)
+                .build();
+
         // Cadastra usuário de role CUSTOMER (table users)
-        UserEntity userEntity = this.createUserUseCase.execute(createCustomerRequest.email(), createCustomerRequest.password(), Role.CUSTOMER);
+        UserEntity userEntity = this.createUserUseCase.execute(userRequest);
 
         // Seta o ID de usuário sobre a instancia customerEntity
         customerEntity.setUserId(userEntity.getId());

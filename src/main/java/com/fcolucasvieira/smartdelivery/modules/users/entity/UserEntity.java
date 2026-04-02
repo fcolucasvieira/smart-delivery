@@ -1,10 +1,8 @@
-package com.fcolucasvieira.smartdelivery.modules.users;
+package com.fcolucasvieira.smartdelivery.modules.users.entity;
 
+import com.fcolucasvieira.smartdelivery.modules.users.entity.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,6 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,11 +26,11 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private UserRole userRole;
 
-    public UserEntity(String username, String password, Role role) {
+    public UserEntity(String username, String password, UserRole userRole) {
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.userRole = userRole;
     }
 }

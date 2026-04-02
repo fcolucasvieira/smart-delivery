@@ -24,5 +24,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ExceptionHandler(UserAlreadyExists.class)
+    public ResponseEntity<String> handleUserAlreadyExists(UserAlreadyExists ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.entity;
 
-import com.fcolucasvieira.smartdelivery.modules.users.UserEntity;
+import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
