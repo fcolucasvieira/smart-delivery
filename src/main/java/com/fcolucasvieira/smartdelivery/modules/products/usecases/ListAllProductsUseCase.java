@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ListAllProductsUseCase {
+
     private final ProductRepository repository;
 
     public List<ListProductResponse> execute() {
