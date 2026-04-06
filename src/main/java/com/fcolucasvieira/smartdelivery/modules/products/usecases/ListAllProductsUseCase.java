@@ -17,6 +17,7 @@ public class ListAllProductsUseCase {
 
     public List<ListProductResponse> execute() {
         List<ProductEntity> listProducts = this.repository.findAll();
+
         return ProductMapper.toListResponse(listProducts);
     }
 }

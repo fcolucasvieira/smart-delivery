@@ -1,6 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.products.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -19,10 +20,10 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String description;
 
-    @Positive
     private BigDecimal price;
 }

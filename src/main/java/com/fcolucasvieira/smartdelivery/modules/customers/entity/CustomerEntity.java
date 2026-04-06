@@ -12,6 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,6 +21,7 @@ public class CustomerEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
@@ -35,14 +37,6 @@ public class CustomerEntity {
     @OneToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
-
-    // Construtor para CustomerMapper.toEntity()
-    public CustomerEntity(String name, String phone, String zipCode, String email) {
-        this.name = name;
-        this.phone = phone;
-        this.zipCode = zipCode;
-        this.email = email;
-    }
 }
 
 

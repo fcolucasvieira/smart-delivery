@@ -1,9 +1,12 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.usecases;
 
+import com.fcolucasvieira.smartdelivery.core.exceptions.CustomerAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.ZipCodeNotFound;
+import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.entity.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.customers.repository.CustomerRepository;
-import com.fcolucasvieira.smartdelivery.modules.customers.dto.ViaCepDTO;
-import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCEPClient;
+import com.fcolucasvieira.smartdelivery.modules.customers.dto.ViaCepResponse;
+import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCepClient;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
 import com.fcolucasvieira.smartdelivery.modules.customers.mapper.CustomerMapper;
 import com.fcolucasvieira.smartdelivery.modules.users.usecases.CreateUserUseCase;
@@ -14,44 +17,67 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CreateCustomerUseCase {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerRepository repository;
     private final CreateUserUseCase createUserUseCase;
-    private final ViaCEPClient viaCEPClient;
+    private final ViaCepClient viaCepClient;
 
-    // @Transactional - Metodo é efetivado caso todas persistências do banco de dados forem concretizadas
     @Transactional
-    public UUID execute(CreateCustomerRequest createCustomerRequest){
-        // Instância de customerEntity (set de dados iniciais via CustomerMapper)
-        CustomerEntity customerEntity = CustomerMapper.toEntity(createCustomerRequest);
+    public CreateCustomerResponse execute(CreateCustomerRequest request){
+        validateCustomer(request.phone());
 
-        // Instância de ViaCepDTO (armazena CEP e logradouro através de rota (API externa))
-        // Seta address através de viaCepDTO
+        CustomerEntity customer = buildCustomer(request);
+
+        enrichAddress(customer, request.zipCode());
+
+        UserEntity user = createUserForCustomer(request);
+
+        customer.setUserId(user.getId());
+
+        this.repository.save(customer);
+
+        return buildResponse(customer);
+    }
+
+    private void validateCustomer(String phone){
+        this.repository.findByPhone(phone)
+                .ifPresent(customer -> {
+                    throw new CustomerAlreadyExists("Customer already exists with phone: " + phone);
+                });
+    }
+
+    private CustomerEntity buildCustomer(CreateCustomerRequest request) {
+        return CustomerMapper.toEntity(request);
+    }
+
+    private void enrichAddress(CustomerEntity customer, String zipCode) {
         try {
-            ViaCepDTO viaCepDTO = this.viaCEPClient.findZipCode(createCustomerRequest.zipCode());
-            customerEntity.setAddress(viaCepDTO.logradouro());
-        } catch (Exception ex){
-            throw new IllegalArgumentException("Erro ao consultar CEP " + createCustomerRequest.zipCode());
-        }
+            ViaCepResponse viaCepResponse = this.viaCepClient.findZipCode(zipCode);
 
+            if(Boolean.TRUE.equals(viaCepResponse.erro()))
+                throw new ZipCodeNotFound("ZIP Code not found: " + zipCode);
+
+            customer.setAddress(viaCepResponse.logradouro());
+        } catch (Exception ex) {
+            throw new ZipCodeNotFound("Error when searching for ZIP code: " + zipCode);
+        }
+    }
+
+    private UserEntity createUserForCustomer(CreateCustomerRequest request) {
         CreateUserRequest userRequest = CreateUserRequest.builder()
-                .username(createCustomerRequest.email())
-                .password(createCustomerRequest.password())
+                .username(request.email())
+                .password(request.password())
                 .userRole(UserRole.CUSTOMER)
                 .build();
 
-        // Cadastra usuário de role CUSTOMER (table users)
-        UserEntity userEntity = this.createUserUseCase.execute(userRequest);
+        return this.createUserUseCase.execute(userRequest);
+    }
 
-        // Seta o ID de usuário sobre a instancia customerEntity
-        customerEntity.setUserId(userEntity.getId());
-
-        this.customerRepository.save(customerEntity);
-        return userEntity.getId();
+    private CreateCustomerResponse buildResponse(CustomerEntity customer){
+        return CustomerMapper.toResponse(customer);
     }
 }

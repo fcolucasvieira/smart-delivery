@@ -24,8 +24,8 @@ public class ProductMapper {
                 .build();
     }
 
-    public static List<ListProductResponse> toListResponse(List<ProductEntity> productEntities) {
-        return productEntities.stream()
+    public static List<ListProductResponse> toListResponse(List<ProductEntity> listProducts) {
+        return listProducts.stream()
                 .map(product -> ListProductResponse.builder()
                         .name(product.getName())
                         .description(product.getDescription())

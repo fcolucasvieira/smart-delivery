@@ -18,7 +18,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -27,10 +27,4 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole userRole;
-
-    public UserEntity(String username, String password, UserRole userRole) {
-        this.username = username;
-        this.password = password;
-        this.userRole = userRole;
-    }
 }

@@ -1,7 +1,10 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.controller;
 
+import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.usecases.CreateCustomerUseCase;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,21 +17,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    private CreateCustomerUseCase createCustomerUseCase;
+    private final CreateCustomerUseCase createCustomerUseCase;
 
-    public CustomerController(CreateCustomerUseCase createCustomerUseCase){
-        this.createCustomerUseCase = createCustomerUseCase;
-    }
+    @PostMapping
+    public ResponseEntity<CreateCustomerResponse> create(@RequestBody @Valid CreateCustomerRequest request){
+        CreateCustomerResponse response = createCustomerUseCase.execute(request);
 
-    @PostMapping("/")
-    public ResponseEntity<?> create(@RequestBody CreateCustomerRequest createCustomerRequest){
-        try {
-            UUID userIdCreated = createCustomerUseCase.execute(createCustomerRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body("ID do usuário: " + userIdCreated);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

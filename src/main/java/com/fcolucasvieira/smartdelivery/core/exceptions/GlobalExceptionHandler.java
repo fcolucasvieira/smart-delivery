@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // Exceptions caused by Bean Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<String>> handleValidationErrors(MethodArgumentNotValidException ex){
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
@@ -29,5 +30,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ExceptionHandler(CustomerAlreadyExists.class)
+    public ResponseEntity<String> handleCustomerAlreadyExists(CustomerAlreadyExists ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 
+    @ExceptionHandler(ZipCodeNotFound.class)
+    public ResponseEntity<String> handleZipCodeNotFound(ZipCodeNotFound ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }
