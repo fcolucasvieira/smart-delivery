@@ -1,10 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,55 +11,23 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DeliveryManEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    // Modelar na próxima migration
+    @Column(nullable = false)
     private String name;
 
+    // Modelar na próxima migration
+    @Column(nullable = false, unique = true)
     private String document;
 
+    // Modelar na próxima migration
+    @Column(nullable = false, unique = true)
     private String phone;
 
     private boolean isAvailable;
-
-    private DeliveryManEntity(String name, String document, String phone, boolean isAvailable) {
-        this.name = name;
-        this.document = document;
-        this.phone = phone;
-        this.isAvailable = isAvailable;
-    }
-
-    // Annotation - @Builder
-    public static class Builder {
-        private String name;
-        private String document;
-        private String phone;
-        private boolean isAvailable;
-
-        public Builder name(String name){
-            this.name = name;
-            return this;
-        }
-
-        public Builder document(String document){
-            this.document = document;
-            return this;
-        }
-
-        public Builder phone(String phone){
-            this.phone = phone;
-            return this;
-        }
-
-        public Builder isAvailable(boolean isAvailable){
-            this.isAvailable = isAvailable;
-            return this;
-        }
-
-        public DeliveryManEntity build(){
-            return new DeliveryManEntity(name, document, phone, isAvailable);
-        }
-    }
 }

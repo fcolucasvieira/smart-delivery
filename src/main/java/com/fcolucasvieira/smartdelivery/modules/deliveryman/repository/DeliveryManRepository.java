@@ -10,5 +10,7 @@ import java.util.UUID;
 public interface DeliveryManRepository extends JpaRepository<DeliveryManEntity, UUID> {
     Optional<DeliveryManEntity> findByDocument(String document);
 
+    Optional<DeliveryManEntity> findByPhone(String phone);
+
     List<DeliveryManEntity> findByIsAvailable(boolean isAvailable);
 }

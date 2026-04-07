@@ -21,6 +21,7 @@ public class CustomerEntity {
     @Column(nullable = false)
     private String name;
 
+    // Modelar na próxima migration
     @Column(nullable = false)
     private String phone;
 

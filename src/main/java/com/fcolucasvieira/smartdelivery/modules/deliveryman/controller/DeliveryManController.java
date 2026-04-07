@@ -1,7 +1,12 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.controller;
 
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManRequest;
+import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases.CreateDeliveryManUseCase;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,17 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/deliveryman")
+@RequestMapping("/deliverymen")
+@RequiredArgsConstructor
 public class DeliveryManController {
-    private CreateDeliveryManUseCase createDeliveryManUseCase;
+    private final CreateDeliveryManUseCase createDeliveryManUseCase;
 
-    public DeliveryManController(CreateDeliveryManUseCase createDeliveryManUseCase) {
-        this.createDeliveryManUseCase = createDeliveryManUseCase;
-    }
-
-    @PostMapping("/")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public UUID create(@RequestBody CreateDeliveryManRequest createDeliveryManRequest){
-        return this.createDeliveryManUseCase.execute(createDeliveryManRequest);
+    public ResponseEntity<CreateDeliveryManResponse> create(@RequestBody @Valid CreateDeliveryManRequest request){
+        CreateDeliveryManResponse response = this.createDeliveryManUseCase.execute(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

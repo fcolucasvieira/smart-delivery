@@ -17,15 +17,15 @@ public class ProductMapper {
                 .build();
     }
 
-    public static CreateProductResponse toResponse(ProductEntity product) {
+    public static CreateProductResponse toResponse(ProductEntity entity) {
         return CreateProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
+                .id(entity.getId())
+                .name(entity.getName())
                 .build();
     }
 
-    public static List<ListProductResponse> toListResponse(List<ProductEntity> listProducts) {
-        return listProducts.stream()
+    public static List<ListProductResponse> toListResponse(List<ProductEntity> list) {
+        return list.stream()
                 .map(product -> ListProductResponse.builder()
                         .name(product.getName())
                         .description(product.getDescription())

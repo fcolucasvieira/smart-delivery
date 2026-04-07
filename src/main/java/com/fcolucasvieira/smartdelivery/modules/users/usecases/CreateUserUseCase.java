@@ -13,17 +13,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateUserUseCase {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
     private final PasswordEncoder encoder;
 
     public UserEntity execute(CreateUserRequest request){
-        this.userRepository.findByUsername(request.username())
-                .ifPresent(user -> {
-                    throw new UserAlreadyExists("User already exists");
-                });
+        validateUser(request);
 
         UserEntity user = UserMapper.toEntity(request, encoder);
 
-        return this.userRepository.save(user);
+        return this.repository.save(user);
+    }
+
+    private void validateUser(CreateUserRequest request) {
+        this.repository.findByUsername(request.username())
+                .ifPresent(user -> {
+                    throw new UserAlreadyExists("User already exists with username: " + request.username());
+                });
     }
 }

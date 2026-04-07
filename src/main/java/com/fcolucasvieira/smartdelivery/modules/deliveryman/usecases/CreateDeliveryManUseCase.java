@@ -1,36 +1,39 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases;
 
+import com.fcolucasvieira.smartdelivery.core.exceptions.DeliveryManAlreadyExists;
+import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
+import com.fcolucasvieira.smartdelivery.modules.deliveryman.mapper.DeliveryManMapper;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.repository.DeliveryManRepository;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
+@RequiredArgsConstructor
 public class CreateDeliveryManUseCase {
-    private DeliveryManRepository deliveryManRepository;
+    private final DeliveryManRepository repository;
 
-    public CreateDeliveryManUseCase(DeliveryManRepository deliveryManRepository) {
-        this.deliveryManRepository = deliveryManRepository;
+    public CreateDeliveryManResponse execute(CreateDeliveryManRequest request){
+        validateDeliveryMan(request);
+
+        DeliveryManEntity deliveryMan = DeliveryManMapper.toEntity(request);
+
+        this.repository.save(deliveryMan);
+
+        return DeliveryManMapper.toResponse(deliveryMan);
     }
 
-    public UUID execute(CreateDeliveryManRequest request){
-        this.deliveryManRepository.findByDocument(request.document())
+    private void validateDeliveryMan(CreateDeliveryManRequest request) {
+        this.repository.findByDocument(request.document())
                 .ifPresent(deliveryMan -> {
-                    throw new IllegalArgumentException("Entregador já cadastrado");
+                    throw new DeliveryManAlreadyExists("Delivery man already exists with document: " + request.document());
                 });
 
-        // Construção de entidade usando Builder para uma construção mais legível
-        DeliveryManEntity deliveryManEntity = new DeliveryManEntity.Builder()
-                .name(request.name())
-                .document(request.document())
-                .phone(request.phone())
-                .isAvailable(true)
-                .build();
-
-        this.deliveryManRepository.save(deliveryManEntity);
-
-        return deliveryManEntity.getId();
+        this.repository.findByPhone(request.phone())
+                .ifPresent(deliveryMan -> {
+                    throw new DeliveryManAlreadyExists("Delivery man already exists with phone: " + request.phone());
+                });
     }
+
 }

@@ -16,14 +16,19 @@ public class CreateProductUseCase {
     private final ProductRepository repository;
 
     public CreateProductResponse execute(CreateProductRequest request) {
-        this.repository.findByName(request.name())
-                .ifPresent(product -> {
-                    throw new ProductAlreadyExists("Product already exists");
-                });
+        validateProduct(request);
 
         ProductEntity product = ProductMapper.toEntity(request);
 
         this.repository.save(product);
+
         return ProductMapper.toResponse(product);
+    }
+
+    private void validateProduct(CreateProductRequest request) {
+        this.repository.findByName(request.name())
+                .ifPresent(product -> {
+                    throw new ProductAlreadyExists("Product already exists with name: " + request.name());
+                });
     }
 }

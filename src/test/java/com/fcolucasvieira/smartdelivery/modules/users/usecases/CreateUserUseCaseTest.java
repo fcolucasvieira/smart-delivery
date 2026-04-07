@@ -82,7 +82,7 @@ class CreateUserUseCaseTest {
                 .thenReturn(Optional.of(new UserEntity()));
 
         // Act & Assert
-        assertThrows(UserAlreadyExists.class, () -> useCase.execute(request));
+        assertThrows(UserAlreadyExists.class, () -> this.useCase.execute(request));
         verify(this.repository, never()).save(any(UserEntity.class));
     }
 }

@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCustomerUseCaseTest {
@@ -91,6 +91,7 @@ class CreateCustomerUseCaseTest {
         assertEquals(name, result.name());
         assertEquals(phone, result.phone());
         assertEquals(email, result.email());
+
     }
 
     @Test
@@ -111,7 +112,7 @@ class CreateCustomerUseCaseTest {
                 .thenReturn(Optional.of(new CustomerEntity()));
 
         // Act & Assert
-        assertThrows(CustomerAlreadyExists.class, () -> useCase.execute(request));
+        assertThrows(CustomerAlreadyExists.class, () -> this.useCase.execute(request));
     }
 
     @Test
@@ -132,7 +133,7 @@ class CreateCustomerUseCaseTest {
                 .thenThrow(new RuntimeException("Time out"));
 
         // Act & Asset
-        assertThrows(ZipCodeNotFound.class, () -> useCase.execute(request));
+        assertThrows(ZipCodeNotFound.class, () -> this.useCase.execute(request));
     }
 
     @Test
@@ -153,7 +154,7 @@ class CreateCustomerUseCaseTest {
                 .thenThrow(new RuntimeException("Timeout"));
 
         // Act & Assert
-        assertThrows(ZipCodeNotFound.class, () -> useCase.execute(request));
+        assertThrows(ZipCodeNotFound.class, () -> this.useCase.execute(request));
     }
 
 }
