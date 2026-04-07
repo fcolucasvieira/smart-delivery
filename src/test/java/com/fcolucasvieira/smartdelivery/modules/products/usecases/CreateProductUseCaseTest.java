@@ -30,7 +30,7 @@ class CreateProductUseCaseTest {
 
     @Test
     @DisplayName("Should create product successfully when name does not exists")
-    void createProductUseCaseSuccess() {
+    void Success() {
         // Arrange
         String name = "Product test";
         CreateProductRequest request = CreateProductRequest.builder()
@@ -56,7 +56,7 @@ class CreateProductUseCaseTest {
 
     @Test
     @DisplayName("Should throw exception when product already exists")
-    void CreateProductUseCaseError() {
+    void NameAlreadyExists() {
         // Arrange
         String name = "Product test";
         CreateProductRequest request = CreateProductRequest.builder()

@@ -1,12 +1,10 @@
-package com.fcolucasvieira.smartdelivery.modules.users;
+package com.fcolucasvieira.smartdelivery.modules.users.usecases;
 
 import com.fcolucasvieira.smartdelivery.core.exceptions.UserAlreadyExists;
 import com.fcolucasvieira.smartdelivery.modules.users.dto.CreateUserRequest;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.enums.UserRole;
-import com.fcolucasvieira.smartdelivery.modules.users.mapper.UserMapper;
 import com.fcolucasvieira.smartdelivery.modules.users.repository.UserRepository;
-import com.fcolucasvieira.smartdelivery.modules.users.usecases.CreateUserUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +33,7 @@ class CreateUserUseCaseTest {
 
     @Test
     @DisplayName("Should create user successfully when username does not exists")
-    void createUserUseCaseSuccess() {
+    void Success() {
         // Arrange
         String username = "test-email@gmail.com";
         String passwordEncode = "encode-password";
@@ -70,7 +68,7 @@ class CreateUserUseCaseTest {
 
     @Test
     @DisplayName("Should throw exception when username already exists")
-    void createUserUseCaseError() {
+    void UsernameAlreadyExists() {
         // Arrange
         String username = "test-email@gmail.com";
 

@@ -28,7 +28,7 @@ class ListAllProductsUseCaseTest {
 
     @Test
     @DisplayName("Should list products successfully")
-    void shouldListAllProductsSuccessfully() {
+    void Success() {
         // Arrange
         List<ProductEntity> products = new ArrayList<>();
 
@@ -60,7 +60,7 @@ class ListAllProductsUseCaseTest {
 
     @Test
     @DisplayName("Should return empty list when no products exist")
-    void ListAllProductsEmpty() {
+    void ListEmpty() {
         // Arrange
         when(this.repository.findAll()).thenReturn(List.of());
 
