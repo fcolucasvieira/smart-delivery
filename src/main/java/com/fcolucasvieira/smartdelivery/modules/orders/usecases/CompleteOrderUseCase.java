@@ -1,8 +1,13 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.usecases;
 
+import com.fcolucasvieira.smartdelivery.core.exceptions.DeliveryManNotAssignedException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.InvalidStatusOrderException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.repository.DeliveryManRepository;
+import com.fcolucasvieira.smartdelivery.modules.orders.dto.CompleteOrderResponse;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;
+import com.fcolucasvieira.smartdelivery.modules.orders.mapper.OrderMapper;
 import com.fcolucasvieira.smartdelivery.modules.orders.repository.OrderRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.enums.StatusOrder;
 import jakarta.transaction.Transactional;
@@ -19,7 +24,7 @@ public class CompleteOrderUseCase {
     private final DeliveryManRepository deliveryManRepository;
 
     @Transactional
-    public void execute(UUID orderId){
+    public CompleteOrderResponse execute(UUID orderId){
         OrderEntity order = getOrder(orderId);
 
         validateOrder(order);
@@ -27,19 +32,21 @@ public class CompleteOrderUseCase {
         completeOrder(order);
 
         releaseDeliveryMan(order);
+
+        return OrderMapper.toCompleteResponse(order);
     }
 
     private OrderEntity getOrder(UUID orderId){
         return this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found " + orderId));
+                .orElseThrow(() -> new NotFoundException("Order not found: " + orderId));
     }
 
     private void validateOrder(OrderEntity order){
         if(order.getStatus() != StatusOrder.EM_ROTA)
-            throw new IllegalStateException("Order must be in EM_ROTA to be completed");
+            throw new InvalidStatusOrderException();
 
         if(order.getDeliveryManId() == null)
-            throw new IllegalStateException("Order has no delivery man assigned");
+            throw new DeliveryManNotAssignedException();
     }
 
     private void completeOrder(OrderEntity order){
@@ -50,7 +57,7 @@ public class CompleteOrderUseCase {
     private void releaseDeliveryMan(OrderEntity order){
         DeliveryManEntity deliveryMan = this.deliveryManRepository
                 .findById(order.getDeliveryManId())
-                .orElseThrow(() -> new IllegalArgumentException("Delivery man not found"));
+                .orElseThrow(() -> new NotFoundException("Delivery man not found"));
 
         deliveryMan.setAvailable(true);
         this.deliveryManRepository.save(deliveryMan);

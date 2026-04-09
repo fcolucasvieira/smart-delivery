@@ -7,6 +7,7 @@ import com.fcolucasvieira.smartdelivery.modules.customers.entity.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.customers.repository.CustomerRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderItemEntity;
+import com.fcolucasvieira.smartdelivery.modules.orders.mapper.OrderMapper;
 import com.fcolucasvieira.smartdelivery.modules.orders.repository.OrderRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.CreateOrderRequest;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.CreateOrderResponse;
@@ -47,7 +48,7 @@ public class CreateOrderUseCase {
 
         publishEvent(order);
 
-        return buildResponse(order);
+        return OrderMapper.toCreateResponse(order);
     }
 
     private CustomerEntity getAuthenticatedCustomer(){
@@ -98,12 +99,5 @@ public class CreateOrderUseCase {
                 RabbitMQConfig.ROUTING_KEY,
                 new OrderEvent(order.getId().toString())
         );
-    }
-
-    private CreateOrderResponse buildResponse(OrderEntity order){
-        return CreateOrderResponse.builder()
-                .orderId(order.getId())
-                .status(order.getStatus().toString())
-                .build();
     }
 }

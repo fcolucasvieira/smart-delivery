@@ -39,4 +39,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoDeliveryManAvailable(NoDeliveryManAvailableException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidStatusOrderException.class)
+    public ResponseEntity<String> handleInvalidStatusOrder(InvalidStatusOrderException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DeliveryManNotAssignedException.class)
+    public ResponseEntity<String> handleDeliveryManNotAssigned(DeliveryManNotAssignedException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
 }
