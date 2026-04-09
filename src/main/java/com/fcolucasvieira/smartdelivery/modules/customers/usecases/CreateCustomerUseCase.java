@@ -1,7 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.CustomerAlreadyExists;
-import com.fcolucasvieira.smartdelivery.core.exceptions.ZipCodeNotFound;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.entity.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.customers.repository.CustomerRepository;
@@ -46,7 +46,7 @@ public class CreateCustomerUseCase {
     private void validateCustomer(String phone){
         this.repository.findByPhone(phone)
                 .ifPresent(customer -> {
-                    throw new CustomerAlreadyExists("Customer already exists with phone: " + phone);
+                    throw new AlreadyExistsException("Customer already exists with phone: " + phone);
                 });
     }
 
@@ -59,11 +59,11 @@ public class CreateCustomerUseCase {
             ViaCepResponse viaCepResponse = this.viaCepClient.findZipCode(zipCode);
 
             if(Boolean.TRUE.equals(viaCepResponse.erro()))
-                throw new ZipCodeNotFound("ZIP Code not found: " + zipCode);
+                throw new NotFoundException("ZIP Code not found: " + zipCode);
 
             customer.setAddress(viaCepResponse.logradouro());
         } catch (Exception ex) {
-            throw new ZipCodeNotFound("Error when searching for ZIP code: " + zipCode);
+            throw new NotFoundException("Error when searching for ZIP code: " + zipCode);
         }
     }
 

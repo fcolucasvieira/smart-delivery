@@ -2,10 +2,7 @@ package com.fcolucasvieira.smartdelivery.modules.orders.entity;
 
 import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

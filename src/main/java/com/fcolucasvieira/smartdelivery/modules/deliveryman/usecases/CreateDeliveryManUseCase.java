@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.DeliveryManAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.mapper.DeliveryManMapper;
@@ -27,12 +27,12 @@ public class CreateDeliveryManUseCase {
     private void validateDeliveryMan(CreateDeliveryManRequest request) {
         this.repository.findByDocument(request.document())
                 .ifPresent(deliveryMan -> {
-                    throw new DeliveryManAlreadyExists("Delivery man already exists with document: " + request.document());
+                    throw new AlreadyExistsException("Delivery man already exists with document: " + request.document());
                 });
 
         this.repository.findByPhone(request.phone())
                 .ifPresent(deliveryMan -> {
-                    throw new DeliveryManAlreadyExists("Delivery man already exists with phone: " + request.phone());
+                    throw new AlreadyExistsException("Delivery man already exists with phone: " + request.phone());
                 });
     }
 

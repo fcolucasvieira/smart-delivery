@@ -1,11 +1,14 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.usecases;
 
+import com.fcolucasvieira.smartdelivery.core.exceptions.NoDeliveryManAvailableException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.repository.DeliveryManRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;
 import com.fcolucasvieira.smartdelivery.modules.orders.repository.OrderRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.enums.StatusOrder;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,15 +16,11 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class AssignDeliveryManToOrderUseCase {
 
-    private OrderRepository orderRepository;
-    private DeliveryManRepository deliveryManRepository;
-
-    public AssignDeliveryManToOrderUseCase(DeliveryManRepository deliveryManRepository, OrderRepository orderRepository) {
-        this.deliveryManRepository = deliveryManRepository;
-        this.orderRepository = orderRepository;
-    }
+    private final OrderRepository orderRepository;
+    private final DeliveryManRepository deliveryManRepository;
 
     @Transactional
     public void execute(UUID orderId){
@@ -41,7 +40,7 @@ public class AssignDeliveryManToOrderUseCase {
 
     private OrderEntity getOrder(UUID orderId){
         return this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found " + orderId));
+                .orElseThrow(() -> new NotFoundException("Order not found " + orderId));
     }
 
     private boolean isAlreadyAssigned(OrderEntity order) {
@@ -53,7 +52,7 @@ public class AssignDeliveryManToOrderUseCase {
         List<DeliveryManEntity> deliveryManEntities = this.deliveryManRepository.findByIsAvailable(true);
 
         if(deliveryManEntities.isEmpty())
-            throw new IllegalStateException("No delivery man available");
+            throw new NoDeliveryManAvailableException();
 
         return deliveryManEntities.getFirst();
     }

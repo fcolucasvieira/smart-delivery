@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.users.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.UserAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import com.fcolucasvieira.smartdelivery.modules.users.mapper.UserMapper;
 import com.fcolucasvieira.smartdelivery.modules.users.repository.UserRepository;
@@ -27,7 +27,7 @@ public class CreateUserUseCase {
     private void validateUser(CreateUserRequest request) {
         this.repository.findByUsername(request.username())
                 .ifPresent(user -> {
-                    throw new UserAlreadyExists("User already exists with username: " + request.username());
+                    throw new AlreadyExistsException("User already exists with username: " + request.username());
                 });
     }
 }

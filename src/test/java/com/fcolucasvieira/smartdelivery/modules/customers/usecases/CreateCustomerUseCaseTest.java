@@ -1,7 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.CustomerAlreadyExists;
-import com.fcolucasvieira.smartdelivery.core.exceptions.ZipCodeNotFound;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCepClient;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
@@ -112,7 +112,7 @@ class CreateCustomerUseCaseTest {
                 .thenReturn(Optional.of(new CustomerEntity()));
 
         // Act & Assert
-        assertThrows(CustomerAlreadyExists.class, () -> this.useCase.execute(request));
+        assertThrows(AlreadyExistsException.class, () -> this.useCase.execute(request));
     }
 
     @Test
@@ -133,7 +133,7 @@ class CreateCustomerUseCaseTest {
                 .thenThrow(new RuntimeException("Time out"));
 
         // Act & Asset
-        assertThrows(ZipCodeNotFound.class, () -> this.useCase.execute(request));
+        assertThrows(NotFoundException.class, () -> this.useCase.execute(request));
     }
 
     @Test
@@ -154,7 +154,7 @@ class CreateCustomerUseCaseTest {
                 .thenThrow(new RuntimeException("Timeout"));
 
         // Act & Assert
-        assertThrows(ZipCodeNotFound.class, () -> this.useCase.execute(request));
+        assertThrows(NotFoundException.class, () -> this.useCase.execute(request));
     }
 
 }

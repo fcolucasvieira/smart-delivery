@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.products.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.ProductAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
 import com.fcolucasvieira.smartdelivery.modules.products.repository.ProductRepository;
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;
@@ -28,7 +28,7 @@ public class CreateProductUseCase {
     private void validateProduct(CreateProductRequest request) {
         this.repository.findByName(request.name())
                 .ifPresent(product -> {
-                    throw new ProductAlreadyExists("Product already exists with name: " + request.name());
+                    throw new AlreadyExistsException("Product already exists with name: " + request.name());
                 });
     }
 }

@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.products.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.ProductAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductResponse;
 import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
@@ -70,7 +70,7 @@ class CreateProductUseCaseTest {
         when(this.repository.findByName(name)).thenReturn(Optional.of(existingProduct));
 
         // Act & Assert
-        assertThrows(ProductAlreadyExists.class, () -> useCase.execute(request));
+        assertThrows(AlreadyExistsException.class, () -> useCase.execute(request));
         verify(this.repository, never()).save(any(ProductEntity.class));
     }
 }

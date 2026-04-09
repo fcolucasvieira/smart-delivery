@@ -6,20 +6,17 @@ import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;
 import com.fcolucasvieira.smartdelivery.modules.orders.repository.OrderRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.enums.StatusOrder;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class CompleteOrderUseCase {
 
-    private OrderRepository orderRepository;
-    private DeliveryManRepository deliveryManRepository;
-
-    public CompleteOrderUseCase(OrderRepository orderRepository, DeliveryManRepository deliveryManRepository) {
-        this.orderRepository = orderRepository;
-        this.deliveryManRepository = deliveryManRepository;
-    }
+    private final OrderRepository orderRepository;
+    private final DeliveryManRepository deliveryManRepository;
 
     @Transactional
     public void execute(UUID orderId){

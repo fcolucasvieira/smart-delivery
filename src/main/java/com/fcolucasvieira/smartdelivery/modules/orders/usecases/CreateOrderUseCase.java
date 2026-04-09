@@ -1,6 +1,8 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.usecases;
 
 import com.fcolucasvieira.smartdelivery.configs.RabbitMQConfig;
+import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
+import com.fcolucasvieira.smartdelivery.core.exceptions.OrderEmptyException;
 import com.fcolucasvieira.smartdelivery.modules.customers.entity.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.customers.repository.CustomerRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;
@@ -15,6 +17,7 @@ import com.fcolucasvieira.smartdelivery.modules.products.repository.ProductRepos
 import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import com.fcolucasvieira.smartdelivery.modules.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,20 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CreateOrderUseCase {
-    private OrderRepository orderRepository;
-    private UserRepository userRepository;
-    private CustomerRepository customerRepository;
-    private ProductRepository productRepository;
-    private RabbitTemplate rabbitTemplate;
-
-    public CreateOrderUseCase(OrderRepository orderRepository, UserRepository userRepository, CustomerRepository customerRepository, ProductRepository productRepository, RabbitTemplate rabbitTemplate) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-        this.customerRepository = customerRepository;
-        this.productRepository = productRepository;
-        this.rabbitTemplate = rabbitTemplate;
-    }
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     @Transactional
     public CreateOrderResponse execute(CreateOrderRequest request) {
@@ -58,10 +54,10 @@ public class CreateOrderUseCase {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         UserEntity user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         return this.customerRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
     }
 
     private OrderEntity createOrder(CustomerEntity customer){
@@ -73,20 +69,22 @@ public class CreateOrderUseCase {
 
     private List<OrderItemEntity> buildOrderItems(OrderEntity order, CreateOrderRequest request) {
         if(request.items() == null || request.items().isEmpty()) {
-            throw new IllegalArgumentException("Order must have at least one item");
+            throw new OrderEmptyException();
         }
 
         List<OrderItemEntity> items = new ArrayList<>();
+
         for(OrderItemRequest itemRequest : request.items()){
             ProductEntity product = this.productRepository
                     .findById(itemRequest.productId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new NotFoundException("Product not found"));
 
-            OrderItemEntity item = new OrderItemEntity();
-            item.setOrderId(order.getId());
-            item.setProductId(product.getId());
-            item.setQuantity(itemRequest.quantity());
-            item.setPrice(product.getPrice());
+            OrderItemEntity item = OrderItemEntity.builder()
+                    .orderId(order.getId())
+                    .productId(product.getId())
+                    .quantity(itemRequest.quantity())
+                    .price(product.getPrice())
+                    .build();
 
             items.add(item);
         }
@@ -103,9 +101,9 @@ public class CreateOrderUseCase {
     }
 
     private CreateOrderResponse buildResponse(OrderEntity order){
-        return new CreateOrderResponse(
-                order.getId(),
-                order.getStatus().toString()
-        );
+        return CreateOrderResponse.builder()
+                .orderId(order.getId())
+                .status(order.getStatus().toString())
+                .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.DeliveryManAlreadyExists;
+import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManRequest;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
@@ -76,7 +76,7 @@ class CreateDeliveryManUseCaseTest {
                 .thenReturn(Optional.of(new DeliveryManEntity()));
 
         // Act & Assert
-        assertThrows(DeliveryManAlreadyExists.class, () -> this.useCase.execute(request));
+        assertThrows(AlreadyExistsException.class, () -> this.useCase.execute(request));
         verify(this.repository, never()).save(any(DeliveryManEntity.class));
     }
 
@@ -96,7 +96,7 @@ class CreateDeliveryManUseCaseTest {
                 .thenReturn(Optional.of(new DeliveryManEntity()));
 
         // Act & Assert
-        assertThrows(DeliveryManAlreadyExists.class, () -> this.useCase.execute(request));
+        assertThrows(AlreadyExistsException.class, () -> this.useCase.execute(request));
         verify(this.repository, never()).save(any(DeliveryManEntity.class));
     }
 }

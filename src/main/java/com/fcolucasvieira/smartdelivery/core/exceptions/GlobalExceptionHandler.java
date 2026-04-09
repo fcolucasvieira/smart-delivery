@@ -20,28 +20,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errors);
     }
 
-    @ExceptionHandler(ProductAlreadyExists.class)
-    public ResponseEntity<String> handleProductAlreadyExists(ProductAlreadyExists ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(UserAlreadyExists.class)
-    public ResponseEntity<String> handleUserAlreadyExists(UserAlreadyExists ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(CustomerAlreadyExists.class)
-    public ResponseEntity<String> handleCustomerAlreadyExists(CustomerAlreadyExists ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(DeliveryManAlreadyExists.class)
-    public ResponseEntity<String> handleDeliveryManAlreadyExists(DeliveryManAlreadyExists ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ZipCodeNotFound.class)
-    public ResponseEntity<String> handleZipCodeNotFound(ZipCodeNotFound ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<String> handleAlreadyExists(AlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(OrderEmptyException.class)
+    public ResponseEntity<String> handleOrderEmpty(OrderEmptyException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NoDeliveryManAvailableException.class)
+    public ResponseEntity<String> handleNoDeliveryManAvailable(NoDeliveryManAvailableException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
 }
