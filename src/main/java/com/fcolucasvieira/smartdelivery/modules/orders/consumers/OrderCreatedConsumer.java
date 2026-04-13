@@ -1,6 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.consumers;
 
-import com.fcolucasvieira.smartdelivery.configs.RabbitMQConfig;
+import com.fcolucasvieira.smartdelivery.infra.configs.RabbitMQConfig;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.NoDeliveryManAvailableException;
 import com.fcolucasvieira.smartdelivery.modules.orders.usecases.AssignDeliveryManToOrderUseCase;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.OrderEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class OrderCreatedConsumer {
             this.assignDeliveryManToOrderUseCase.execute(UUID.fromString(event.id()));
             log.info("Pedido {} processado com sucesso", event.id());
 
-        } catch (IllegalStateException ex) {
+        } catch (NoDeliveryManAvailableException ex) {
 
             int currentRetry = (retryCount == null) ? 0 : retryCount;
 

@@ -1,9 +1,10 @@
-package com.fcolucasvieira.smartdelivery.configs;
+package com.fcolucasvieira.smartdelivery.infra.configs;
 
 import com.fcolucasvieira.smartdelivery.modules.users.usecases.CreateUserUseCase;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.enums.UserRole;
 import com.fcolucasvieira.smartdelivery.modules.users.dto.CreateUserRequest;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 // (Configuration) - Inicializar Admin da aplicação
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class AdminInitializerConfig {
     // (CommandLineRunner) - Útil para execução de código após a inicialização completa da aplicação
     // Ideal para tarefas de inicialização como carregamento de dados iniciais em banco de dados
-    // @Bean
+    @Bean
     public CommandLineRunner initAdmin(CreateUserUseCase createUserUseCase){
         return args -> {
             CreateUserRequest request = CreateUserRequest.builder()

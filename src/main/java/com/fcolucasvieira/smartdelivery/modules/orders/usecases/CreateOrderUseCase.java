@@ -1,8 +1,8 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.usecases;
 
-import com.fcolucasvieira.smartdelivery.configs.RabbitMQConfig;
-import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
-import com.fcolucasvieira.smartdelivery.core.exceptions.OrderEmptyException;
+import com.fcolucasvieira.smartdelivery.infra.configs.RabbitMQConfig;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.NotFoundException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.OrderEmptyException;
 import com.fcolucasvieira.smartdelivery.modules.customers.entity.CustomerEntity;
 import com.fcolucasvieira.smartdelivery.modules.customers.repository.CustomerRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;

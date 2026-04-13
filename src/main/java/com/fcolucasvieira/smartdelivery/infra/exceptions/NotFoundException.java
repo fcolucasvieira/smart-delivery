@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery.core.exceptions;
+package com.fcolucasvieira.smartdelivery.infra.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

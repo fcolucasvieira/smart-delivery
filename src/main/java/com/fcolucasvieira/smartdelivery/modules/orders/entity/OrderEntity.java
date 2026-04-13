@@ -42,10 +42,4 @@ public class OrderEntity {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items = new ArrayList<>();
-
-    public OrderEntity(UUID customerId, CustomerEntity customer, StatusOrder status) {
-        this.customerId = customerId;
-        this.customer = customer;
-        this.status = status;
-    }
 }

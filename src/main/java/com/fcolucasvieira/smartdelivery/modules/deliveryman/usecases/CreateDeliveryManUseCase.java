@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.mapper.DeliveryManMapper;

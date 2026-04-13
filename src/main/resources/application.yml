@@ -29,3 +29,7 @@ feign:
         url: https://viacep.com.br/ws/
 
 
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my_secret_key}

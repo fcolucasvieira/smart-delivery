@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.users.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.users.dto.CreateUserRequest;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.UserEntity;
 import com.fcolucasvieira.smartdelivery.modules.users.entity.enums.UserRole;

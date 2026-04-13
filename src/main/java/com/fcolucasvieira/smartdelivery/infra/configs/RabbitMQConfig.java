@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery.configs;
+package com.fcolucasvieira.smartdelivery.infra.configs;
 
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

@@ -1,4 +1,4 @@
-package com.fcolucasvieira.smartdelivery.core.exceptions;
+package com.fcolucasvieira.smartdelivery.infra.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.orders.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.NoDeliveryManAvailableException;
-import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.NoDeliveryManAvailableException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.entity.DeliveryManEntity;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.repository.DeliveryManRepository;
 import com.fcolucasvieira.smartdelivery.modules.orders.entity.OrderEntity;

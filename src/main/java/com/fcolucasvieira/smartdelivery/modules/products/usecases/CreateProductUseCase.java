@@ -1,6 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.products.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.AlreadyExistsException;
 import com.fcolucasvieira.smartdelivery.modules.products.entity.ProductEntity;
 import com.fcolucasvieira.smartdelivery.modules.products.repository.ProductRepository;
 import com.fcolucasvieira.smartdelivery.modules.products.dto.CreateProductRequest;

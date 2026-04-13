@@ -3,7 +3,7 @@ CREATE TABLE users (
 
     username VARCHAR(150) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    userRole VARCHAR(50) NOT NULL,
+    user_role VARCHAR(50) NOT NULL,
 
     CONSTRAINT uk_users_username UNIQUE (username)
 );
@@ -12,13 +12,14 @@ CREATE TABLE customers (
     id UUID PRIMARY KEY,
 
     name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20),
+    phone VARCHAR(20) NOT NULL,
     email VARCHAR(150) NOT NULL,
     address VARCHAR(255),
     zip_code VARCHAR(20),
 
     user_id UUID,
 
+    CONSTRAINT uk_customers_phone UNIQUE (phone),
     CONSTRAINT uk_customers_email UNIQUE (email),
     CONSTRAINT fk_customers_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -38,11 +39,12 @@ CREATE TABLE delivery_men (
 
     name VARCHAR(100) NOT NULL,
     document VARCHAR(20) NOT NULL,
-    phone VARCHAR(20),
+    phone VARCHAR(20) NOT NULL,
 
     is_available BOOLEAN NOT NULL DEFAULT true,
 
-    CONSTRAINT uk_delivery_men_document UNIQUE (document)
+    CONSTRAINT uk_delivery_men_document UNIQUE (document),
+    CONSTRAINT uk_delivery_men_phone UNIQUE (phone)
 );
 
 CREATE INDEX idx_delivery_men_available ON delivery_men(is_available);

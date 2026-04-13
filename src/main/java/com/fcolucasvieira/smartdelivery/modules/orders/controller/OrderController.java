@@ -4,6 +4,8 @@ import com.fcolucasvieira.smartdelivery.modules.orders.dto.CreateOrderRequest;
 import com.fcolucasvieira.smartdelivery.modules.orders.dto.CreateOrderResponse;
 import com.fcolucasvieira.smartdelivery.modules.orders.usecases.CompleteOrderUseCase;
 import com.fcolucasvieira.smartdelivery.modules.orders.usecases.CreateOrderUseCase;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +13,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    private CreateOrderUseCase createOrderUseCase;
-    private CompleteOrderUseCase completeOrderUseCase;
+    private final CreateOrderUseCase createOrderUseCase;
+    private final CompleteOrderUseCase completeOrderUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase, CompleteOrderUseCase completeOrderUseCase) {
-        this.createOrderUseCase = createOrderUseCase;
-        this.completeOrderUseCase = completeOrderUseCase;
-    }
-
-    @PostMapping("/")
-    public CreateOrderResponse create(@RequestBody CreateOrderRequest createOrderRequest){
-        return this.createOrderUseCase.execute(createOrderRequest);
+    @PostMapping
+    public CreateOrderResponse create(@RequestBody @Valid CreateOrderRequest request){
+        return this.createOrderUseCase.execute(request);
     }
 
     @PutMapping("/delivered/{orderId}")

@@ -1,7 +1,7 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.usecases;
 
-import com.fcolucasvieira.smartdelivery.core.exceptions.AlreadyExistsException;
-import com.fcolucasvieira.smartdelivery.core.exceptions.NotFoundException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.AlreadyExistsException;
+import com.fcolucasvieira.smartdelivery.infra.exceptions.NotFoundException;
 import com.fcolucasvieira.smartdelivery.integrations.zipcode.ViaCepClient;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
