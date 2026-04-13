@@ -3,6 +3,7 @@ package com.fcolucasvieira.smartdelivery.modules.customers.controller;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.usecases.CreateCustomerUseCase;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,10 @@ public class CustomerController {
 
     private final CreateCustomerUseCase createCustomerUseCase;
 
+    @Operation(
+            summary = "Create a new customer",
+            description = "Registers a new customer in the system. This endpoint integrated with the external ViaCEP API to automatically fetch and validate address information based on the provided postal code (CEP)."
+    )
     @PostMapping
     public ResponseEntity<CreateCustomerResponse> create(@RequestBody @Valid CreateCustomerRequest request){
         CreateCustomerResponse response = createCustomerUseCase.execute(request);
