@@ -1,5 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.customers.controller;
 
+import com.fcolucasvieira.smartdelivery.infra.responses.ApiResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerResponse;
 import com.fcolucasvieira.smartdelivery.modules.customers.usecases.CreateCustomerUseCase;
 import com.fcolucasvieira.smartdelivery.modules.customers.dto.CreateCustomerRequest;
@@ -28,9 +29,9 @@ public class CustomerController {
             description = "Registers a new customer in the system. This endpoint integrated with the external ViaCEP API to automatically fetch and validate address information based on the provided postal code (CEP)."
     )
     @PostMapping
-    public ResponseEntity<CreateCustomerResponse> create(@RequestBody @Valid CreateCustomerRequest request){
+    public ResponseEntity<ApiResponse<CreateCustomerResponse>> create(@RequestBody @Valid CreateCustomerRequest request){
         CreateCustomerResponse response = createCustomerUseCase.execute(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "Customer registered successfully"));
     }
 }

@@ -1,5 +1,6 @@
 package com.fcolucasvieira.smartdelivery.modules.deliveryman.controller;
 
+import com.fcolucasvieira.smartdelivery.infra.responses.ApiResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManRequest;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.dto.CreateDeliveryManResponse;
 import com.fcolucasvieira.smartdelivery.modules.deliveryman.usecases.CreateDeliveryManUseCase;
@@ -30,9 +31,9 @@ public class DeliveryManController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CreateDeliveryManResponse> create(@RequestBody @Valid CreateDeliveryManRequest request){
+    public ResponseEntity<ApiResponse<CreateDeliveryManResponse>> create(@RequestBody @Valid CreateDeliveryManRequest request){
         CreateDeliveryManResponse response = this.createDeliveryManUseCase.execute(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "Delivery man registered successfully"));
     }
 }

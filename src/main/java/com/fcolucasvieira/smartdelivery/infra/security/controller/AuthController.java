@@ -1,5 +1,6 @@
 package com.fcolucasvieira.smartdelivery.infra.security.controller;
 
+import com.fcolucasvieira.smartdelivery.infra.responses.ApiResponse;
 import com.fcolucasvieira.smartdelivery.infra.security.dto.LoginUserResponse;
 import com.fcolucasvieira.smartdelivery.infra.security.dto.LoginUserRequest;
 import com.fcolucasvieira.smartdelivery.modules.users.usecases.LoginUserUseCase;
@@ -23,9 +24,9 @@ public class AuthController {
             description = "Authenticates a user with username and password. Returns a JWT token that must be used to access protected endpoints. No authentication required to call this endpoint."
     )
     @PostMapping("/login")
-    public ResponseEntity<LoginUserResponse> login(@RequestBody @Valid LoginUserRequest request) {
+    public ResponseEntity<ApiResponse<LoginUserResponse>> login(@RequestBody @Valid LoginUserRequest request) {
         LoginUserResponse response = this.useCase.execute(request);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response, "Login successfully"));
     }
 }

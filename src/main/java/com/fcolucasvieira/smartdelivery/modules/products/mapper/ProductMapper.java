@@ -24,15 +24,12 @@ public class ProductMapper {
                 .build();
     }
 
-    public static List<ListProductResponse> toListResponse(List<ProductEntity> list) {
-        return list.stream()
-                .map(product -> ListProductResponse.builder()
-                        .id(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .price(product.getPrice())
-                        .build()
-                )
-                .collect(Collectors.toList());
+    public static ListProductResponse toListResponse(ProductEntity entity) {
+        return ListProductResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .price(entity.getPrice())
+                .build();
     }
 }

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,32 +46,35 @@ class ListAllProductsUseCaseTest {
             );
         }
 
-        when(this.repository.findAll()).thenReturn(products);
+        Page<ProductEntity> page = new PageImpl<>(products, PageRequest.of(0,5), products.size());
+
+        when(this.repository.findAll(any(Pageable.class))).thenReturn(page);
 
         // Act
-        List<ListProductResponse> result = useCase.execute();
+        Page<ListProductResponse> result = useCase.execute(PageRequest.of(0,5));
 
         // Assert
         assertAll(
-                () -> assertEquals(5, result.size()),
-                () -> assertEquals("Product 0", result.getFirst().name()),
-                () -> assertEquals("Description product 0", result.getFirst().description()),
-                () -> assertEquals(new BigDecimal("10"), result.getFirst().price())
+                () -> assertEquals(5, result.getTotalElements()),
+                () -> assertEquals("Product 0", result.getContent().get(0).name()),
+                () -> assertEquals("Description product 0", result.getContent().get(0).description()),
+                () -> assertEquals(new BigDecimal("10"), result.getContent().get(0).price())
         );
 
-        verify(this.repository, times(1)).findAll();
+        verify(this.repository, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
     @DisplayName("Should return empty list when no products exist")
     void ListEmpty() {
         // Arrange
-        when(this.repository.findAll()).thenReturn(List.of());
+        Page<ProductEntity> emptyPage = Page.empty();
+        when(this.repository.findAll(any(Pageable.class))).thenReturn(emptyPage);
 
         // Act
-        List<ListProductResponse> result = useCase.execute();
+        Page<ListProductResponse> result = useCase.execute(PageRequest.of(0, 5));
 
         assertTrue(result.isEmpty());
-        verify(this.repository, times(1)).findAll();
+        verify(this.repository, times(1)).findAll(any(Pageable.class));
     }
 }
