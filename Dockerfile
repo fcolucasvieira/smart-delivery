@@ -1,7 +1,6 @@
 # Build application
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-LABEL authors="Lucas"
 
 # Copy pom.xml and download dependencys
 COPY pom.xml .
@@ -12,7 +11,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Final image to run
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
 # Copy of the .jar file generated in the build phase
