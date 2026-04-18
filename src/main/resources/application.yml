@@ -7,9 +7,9 @@ spring:
 
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${DB_AWS_URL}
+    username: ${DB_AWS_USER}
+    password: ${DB_AWS_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -28,11 +28,8 @@ feign:
       viacep-service:
         url: https://viacep.com.br/ws/
 
-
 api:
   security:
     token:
       secret: ${JWT_SECRET:my_secret_key}
 
-server:
-  port: 8081
