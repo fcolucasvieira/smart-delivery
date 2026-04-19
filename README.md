@@ -11,7 +11,7 @@
 
 ---
 
-## 📌 Sobre o projeto
+# 📌 Sobre o projeto
 
 O **SmartDelivery** é uma API backend desenvolvida com **Spring Boot**, que simula um sistema moderno de **gestão de pedidos e entregas**, utilizando uma abordagem baseada em eventos, com **processamento assíncrono** de pedidos.
 
@@ -21,7 +21,7 @@ Este projeto foi desenvolvido com foco em simular cenários reais de **sistemas 
 
 ---
 
-## 🎯 Objetivo
+# 🎯 Objetivo
 
 Demonstrar na prática conceitos avançados de backend:
 
@@ -96,7 +96,7 @@ O sistema segue uma abordagem de:
 
 ---
 
-## 🔹 Organização por domínios
+### 🔹 Organização por domínios
 
 modules/
    ├── customers
@@ -109,7 +109,7 @@ Cada módulo encapsula sua própria lógica de negócio.
 
 ---
 
-## 🔹 Estrutura interna (ex: orders)
+### 🔹 Estrutura interna (ex: orders)
 
 orders/
    ├── consumers
@@ -122,7 +122,7 @@ orders/
 
 ---
 
-## 🔹 Fluxo interno
+### 🔹 Fluxo interno
 
 HTTP → Controller → UseCase → Repository → Database  
                                      ↓  
@@ -132,7 +132,7 @@ HTTP → Controller → UseCase → Repository → Database
 
 ---
 
-## 🔹 Benefícios
+### 🔹 Benefícios
 
 - Baixo acoplamento
 - Alta coesão
@@ -281,14 +281,14 @@ Isso facilita debugging e análise de comportamento do sistema.
 
 # ⚙️ Como executar o projeto
 
-## 1️⃣ Clonar repositório
+### 1️⃣ Clonar repositório
 
 ```bash
 git clone https://github.com/fcolucasvieira/smartdelivery.git
 cd smartdelivery
 ```
 
-## 2️⃣ Configurar variáveis de ambiente
+### 2️⃣ Configurar variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
 
@@ -321,13 +321,13 @@ Após subir o docker-compose, os seguintes serviços estarão disponíveis:
   password: guest  
 - pgAdmin → http://localhost:5050  
 
-## 3️⃣ Subir dependências
+### 3️⃣ Subir dependências
 
 ```bash
 docker-compose up -d
 ```
 
-## 4️⃣ Configurar aplicação 
+### 4️⃣ Configurar aplicação 
 
 ```yaml
 spring:
@@ -343,20 +343,20 @@ spring:
     password: ${RABBITMQ_PASSWORD}
 ```
 
-## 5️⃣ Executar
+### 5️⃣ Executar
 
 ```bash
 mvn spring-boot:run
 ```
 
-## 🔍 Notas sobre o ambiente
+### 🔍 Notas sobre o ambiente
 
 > ⚠️ O **docker-compose** é destinado apenas para ambiente local de desenvolvimento.  
 > Em produção, a aplicação utiliza AWS (EC2 + RDS) e RabbitMQ via CloudAMQP.
 
 ---
 
-## 📚 Documentação da API
+# 📚 Documentação da API
 
 A documentação interativa da API está disponível via **Swagger**:
 
@@ -364,7 +364,7 @@ A documentação interativa da API está disponível via **Swagger**:
 
 ---
 
-## ☁️ Deploy
+# ☁️ Deploy
 
 Aplicação deployada utilizando:
 - AWS EC2 (aplicação)
@@ -373,7 +373,7 @@ Aplicação deployada utilizando:
 
 ---
 
-## 🚀 Diferenciais do projeto
+# 🚀 Diferenciais do projeto
 
 - Arquitetura modular inspirada em **DDD**
 - Sistema orientado a eventos (event-driven)
@@ -385,7 +385,7 @@ Aplicação deployada utilizando:
 
 ---
 
-## 👨‍💻 Autor
+# 👨‍💻 Autor
 
 **Lucas Vieira**
 Estudante de Engenharia de Computação – UFC Sobral
