@@ -4,15 +4,16 @@
 ![Spring Boot](https://img.shields.io/badge/spring_boot-brightgreen?style=for-the-badge&logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-database-blue?style=for-the-badge&logo=postgresql)
 ![RabbitMQ](https://img.shields.io/badge/rabbitmq-event--driven-orange?style=for-the-badge&logo=rabbitmq)
-![Docker](https://img.shields.io/badge/docker-containerization-blue?style=for-the-badge&logo=docker)
-![AWS](https://img.shields.io/badge/aws-cloud-black?style=for-the-badge&logo=amazonaws)
+![Swagger](https://img.shields.io/badge/swagger-api--docs-green?style=for-the-badge&logo=swagger)
+![Docker](https://img.shields.io/badge/docker-containerization-2496ED?style=for-the-badge&logo=docker)
+![AWS](https://img.shields.io/badge/aws-cloud-FF9900?style=for-the-badge&logo=amazonaws)
 ![JWT](https://img.shields.io/badge/JWT-security-black?style=for-the-badge&logo=jsonwebtokens)
 
 ---
 
 ## 📌 Sobre o projeto
 
-O **SmartDelivery** é uma API backend desenvolvida com **Spring Boot**, que simula um sistema moderno de **gestão de pedidos e entregas**, utilizando uma abordagem **event-driven** com mensageria.
+O **SmartDelivery** é uma API backend desenvolvida com **Spring Boot**, que simula um sistema moderno de **gestão de pedidos e entregas**, utilizando uma abordagem baseada em eventos, com **processamento assíncrono** de pedidos.
 
 A aplicação foi projetada para representar um fluxo real de negócio, onde a criação de pedidos é processada de forma **assíncrona**, garantindo maior **escalabilidade, resiliência e desacoplamento**.
 
@@ -123,9 +124,11 @@ orders/
 
 ## 🔹 Fluxo interno
 
-HTTP → Controller → UseCase → Repository → Database
-→ Event Publisher (RabbitMQ)
-→ Event Consumer
+HTTP → Controller → UseCase → Repository → Database  
+                                     ↓  
+                        Event Publisher (RabbitMQ)  
+                                     ↓  
+                         Event Consumer  
 
 ---
 
@@ -166,6 +169,19 @@ A aplicação implementa:
 - Docker  
 - AWS (EC2 + RDS)  
 - Swagger / OpenAPI  
+
+---
+
+# 🌐 Integração com APIs externas
+
+O sistema integra com a API pública **ViaCEP** utilizando **Spring Cloud OpenFeign**.
+
+### 🔹 Objetivo
+
+- Buscar automaticamente dados de endereço a partir do CEP informado
+- Preencher informações como logradouro de forma automática
+
+Essa abordagem melhora a experiência do usuário e reduz erros de entrada de dados.
 
 ---
 
@@ -235,12 +251,12 @@ A API utiliza um padrão unificado de respostas através do DTO `ApiResponse`, g
 {
   "status": "error",
   "message": "No delivery man available",
-  "data": { ... },
+  "data": null,
   "timestamp": "2026-04-19T12:00:00"
 }
 ```
 
-Esse padrão facilita a integração com **frontends** e outros serviços.
+Esse padrão facilita a integração com frontends e outros serviços.
 
 ---
 
@@ -251,7 +267,17 @@ Esse padrão facilita a integração com **frontends** e outros serviços.
 
 ---
 
+# 📊 Observabilidade
 
+Foram implementados logs estratégicos na camada de mensageria para:
+
+- monitoramento de eventos
+- rastreamento de falhas
+- acompanhamento de retries e DLQ
+
+Isso facilita debugging e análise de comportamento do sistema.
+
+---
 
 # ⚙️ Como executar o projeto
 
@@ -334,7 +360,7 @@ mvn spring-boot:run
 
 A documentação interativa da API está disponível via **Swagger**:
 
-👉 http://34.207.210.137:8080/swagger-ui/index.html
+👉 [Acessar Swagger](http://34.207.210.137:8080/swagger-ui/index.html)
 
 ---
 
