@@ -207,12 +207,51 @@ O sistema trata cenários como:
 
 ---
 
+# 📦 Padrão de respostas da API
+
+A API utiliza um padrão unificado de respostas através do DTO `ApiResponse`, garantindo previsibilidade tanto em casos de sucesso quanto de erro.
+
+### 🔹 Estrutura
+
+- `status` → "success" ou "error"  
+- `message` → mensagem descritiva da operação  
+- `data` → payload da resposta  
+- `timestamp` → momento da resposta  
+
+### 🔹 Exemplo de sucesso
+
+```json
+{
+  "status": "success",
+  "message": "Order created successfully",
+  "data": { ... },
+  "timestamp": "2026-04-19T12:00:00"
+}
+```
+
+### 🔹 Exemplo de erro
+
+```json
+{
+  "status": "error",
+  "message": "No delivery man available",
+  "data": { ... },
+  "timestamp": "2026-04-19T12:00:00"
+}
+```
+
+Esse padrão facilita a integração com **frontends** e outros serviços.
+
+---
+
 # 🧪 Testes
 
 - Testes unitários focados nas regras de negócio  
 - Estrutura preparada para testes de integração  
 
 ---
+
+
 
 # ⚙️ Como executar o projeto
 
