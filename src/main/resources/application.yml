@@ -5,7 +5,6 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
-
   datasource:
     url: ${DB_AWS_URL}
     username: ${DB_AWS_USER}
@@ -32,4 +31,5 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:my_secret_key}
+
 
