@@ -34,19 +34,19 @@ public class OrderCreatedConsumer {
             @Header(name = "x-retry-count", required = false) Integer retryCount
     ) {
 
-        log.info("Mensagem recebida da fila. OrderId: {}", event.id());
+        log.info("Message received from the queue. OrderId: {}", event.id());
 
         try {
 
             this.assignDeliveryManToOrderUseCase.execute(UUID.fromString(event.id()));
-            log.info("Pedido {} processado com sucesso", event.id());
+            log.info("Order {} processed successfully", event.id());
 
         } catch (NoDeliveryManAvailableException ex) {
 
             int currentRetry = (retryCount == null) ? 0 : retryCount;
 
             if(currentRetry < 3){
-                log.warn("Sem entregador disponível para pedido {}. Tentativa {}", event.id(), currentRetry + 1);
+                log.warn("No delivery man available for order {}. Attempt {}", event.id(), currentRetry + 1);
 
                 rabbitTemplate.convertAndSend(
                         RabbitMQConfig.EXCHANGE,
@@ -59,15 +59,15 @@ public class OrderCreatedConsumer {
                         }
                 );
             } else {
-                log.error("Pedido {} falhou após 3 tentativas. Enviando para DLQ", event.id(), ex);
+                log.error("Order {} failed after 3 attempts. Sending to DLQ", event.id(), ex);
                 throw ex;
             }
 
         } catch (IllegalArgumentException ex){
-            log.error("Erro de dados inválidos no pedido {}. Enviando direto para DLQ", event.id(), ex);
+            log.error("Invalid data error in the order {}. Sending directly to DLQ", event.id(), ex);
             throw ex;
         } catch (Exception ex) {
-            log.error("Erro inesperado no pedido {}. Enviando para DLQ", event.id(), ex);
+            log.error("Unexpected error in the order {}. Sending to DLQ", event.id(), ex);
             throw ex;
         }
     }
