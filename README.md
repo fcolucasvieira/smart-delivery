@@ -262,14 +262,14 @@ Esse padrão facilita a integração com frontends e outros serviços.
 
 # 🧪 Testes
 
-- Testes unitários focados nas regras de negócio  
-- Estrutura preparada para testes de integração  
+- **Testes unitários** focados nas regras de negócio  
+- Estrutura preparada para **testes de integração**  
 
 ---
 
 # 📊 Observabilidade
 
-Foram implementados logs estratégicos na camada de mensageria para:
+Foram implementados **logs estratégicos** na camada de mensageria para:
 
 - monitoramento de eventos
 - rastreamento de falhas
@@ -294,12 +294,12 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5433/smartdelivery
-DB_USER=postgres
-DB_PASSWORD=postgres
+DB_USER=admin
+DB_PASSWORD=admin
 
 POSTGRES_DB=smartdelivery
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
 
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin
@@ -315,11 +315,9 @@ RABBITMQ_PASSWORD=guest
 Após subir o docker-compose, os seguintes serviços estarão disponíveis:
 
 - PostgreSQL → localhost:5433  
-- RabbitMQ → localhost:5672  
-- RabbitMQ Management → http://localhost:15672  
-  user: guest  
-  password: guest  
-- pgAdmin → http://localhost:5050  
+- RabbitMQ → localhost:5672   
+- PgAdmin → http://localhost:5050
+- RabbitMQ Management → http://localhost:15672   
 
 ### 3️⃣ Subir dependências
 
@@ -351,8 +349,8 @@ mvn spring-boot:run
 
 ### 🔍 Notas sobre o ambiente
 
-> ⚠️ O **docker-compose** é destinado apenas para ambiente local de desenvolvimento.  
-> Em produção, a aplicação utiliza AWS (EC2 + RDS) e RabbitMQ via CloudAMQP.
+> ⚠️ O **docker-compose** é destinado apenas para **ambiente local** de desenvolvimento.  
+> Em produção, a aplicação utiliza **AWS (EC2 + RDS)** e RabbitMQ via CloudAMQP.
 
 ---
 
