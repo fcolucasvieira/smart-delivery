@@ -4,15 +4,16 @@
 ![Spring Boot](https://img.shields.io/badge/spring_boot-brightgreen?style=for-the-badge&logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-database-blue?style=for-the-badge&logo=postgresql)
 ![RabbitMQ](https://img.shields.io/badge/rabbitmq-event--driven-orange?style=for-the-badge&logo=rabbitmq)
-![Docker](https://img.shields.io/badge/docker-containerization-blue?style=for-the-badge&logo=docker)
-![AWS](https://img.shields.io/badge/aws-cloud-black?style=for-the-badge&logo=amazonaws)
+![Swagger](https://img.shields.io/badge/swagger-api--docs-green?style=for-the-badge&logo=swagger)
+![Docker](https://img.shields.io/badge/docker-containerization-2496ED?style=for-the-badge&logo=docker)
+![AWS](https://img.shields.io/badge/aws-cloud-FF9900?style=for-the-badge&logo=amazonaws)
 ![JWT](https://img.shields.io/badge/JWT-security-black?style=for-the-badge&logo=jsonwebtokens)
 
 ---
 
-## 📌 Sobre o projeto
+# 📌 Sobre o projeto
 
-O **SmartDelivery** é uma API backend desenvolvida com **Spring Boot**, que simula um sistema moderno de **gestão de pedidos e entregas**, utilizando uma abordagem **event-driven** com mensageria.
+O **SmartDelivery** é uma API backend desenvolvida com **Spring Boot**, que simula um sistema moderno de **gestão de pedidos e entregas**, utilizando uma abordagem baseada em eventos, com **processamento assíncrono** de pedidos.
 
 A aplicação foi projetada para representar um fluxo real de negócio, onde a criação de pedidos é processada de forma **assíncrona**, garantindo maior **escalabilidade, resiliência e desacoplamento**.
 
@@ -20,7 +21,7 @@ Este projeto foi desenvolvido com foco em simular cenários reais de **sistemas 
 
 ---
 
-## 🎯 Objetivo
+# 🎯 Objetivo
 
 Demonstrar na prática conceitos avançados de backend:
 
@@ -95,7 +96,7 @@ O sistema segue uma abordagem de:
 
 ---
 
-## 🔹 Organização por domínios
+### 🔹 Organização por domínios
 
 modules/
    ├── customers
@@ -108,7 +109,7 @@ Cada módulo encapsula sua própria lógica de negócio.
 
 ---
 
-## 🔹 Estrutura interna (ex: orders)
+### 🔹 Estrutura interna (ex: orders)
 
 orders/
    ├── consumers
@@ -121,15 +122,17 @@ orders/
 
 ---
 
-## 🔹 Fluxo interno
+### 🔹 Fluxo interno
 
-HTTP → Controller → UseCase → Repository → Database
-→ Event Publisher (RabbitMQ)
-→ Event Consumer
+HTTP → Controller → UseCase → Repository → Database  
+                                     ↓  
+                        Event Publisher (RabbitMQ)  
+                                     ↓  
+                         Event Consumer  
 
 ---
 
-## 🔹 Benefícios
+### 🔹 Benefícios
 
 - Baixo acoplamento
 - Alta coesão
@@ -166,6 +169,19 @@ A aplicação implementa:
 - Docker  
 - AWS (EC2 + RDS)  
 - Swagger / OpenAPI  
+
+---
+
+# 🌐 Integração com APIs externas
+
+O sistema integra com a API pública **ViaCEP** utilizando **Spring Cloud OpenFeign**.
+
+### 🔹 Objetivo
+
+- Buscar automaticamente dados de endereço a partir do CEP informado
+- Preencher informações como logradouro de forma automática
+
+Essa abordagem melhora a experiência do usuário e reduz erros de entrada de dados.
 
 ---
 
@@ -207,6 +223,43 @@ O sistema trata cenários como:
 
 ---
 
+# 📦 Padrão de respostas da API
+
+A API utiliza um padrão unificado de respostas através do DTO `ApiResponse`, garantindo previsibilidade tanto em casos de sucesso quanto de erro.
+
+### 🔹 Estrutura
+
+- `status` → "success" ou "error"  
+- `message` → mensagem descritiva da operação  
+- `data` → payload da resposta  
+- `timestamp` → momento da resposta  
+
+### 🔹 Exemplo de sucesso
+
+```json
+{
+  "status": "success",
+  "message": "Order created successfully",
+  "data": { ... },
+  "timestamp": "2026-04-19T12:00:00"
+}
+```
+
+### 🔹 Exemplo de erro
+
+```json
+{
+  "status": "error",
+  "message": "No delivery man available",
+  "data": null,
+  "timestamp": "2026-04-19T12:00:00"
+}
+```
+
+Esse padrão facilita a integração com frontends e outros serviços.
+
+---
+
 # 🧪 Testes
 
 - Testes unitários focados nas regras de negócio  
@@ -214,16 +267,28 @@ O sistema trata cenários como:
 
 ---
 
+# 📊 Observabilidade
+
+Foram implementados logs estratégicos na camada de mensageria para:
+
+- monitoramento de eventos
+- rastreamento de falhas
+- acompanhamento de retries e DLQ
+
+Isso facilita debugging e análise de comportamento do sistema.
+
+---
+
 # ⚙️ Como executar o projeto
 
-## 1️⃣ Clonar repositório
+### 1️⃣ Clonar repositório
 
 ```bash
 git clone https://github.com/fcolucasvieira/smartdelivery.git
 cd smartdelivery
 ```
 
-## 2️⃣ Configurar variáveis de ambiente
+### 2️⃣ Configurar variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
 
@@ -256,13 +321,13 @@ Após subir o docker-compose, os seguintes serviços estarão disponíveis:
   password: guest  
 - pgAdmin → http://localhost:5050  
 
-## 3️⃣ Subir dependências
+### 3️⃣ Subir dependências
 
 ```bash
 docker-compose up -d
 ```
 
-## 4️⃣ Configurar aplicação 
+### 4️⃣ Configurar aplicação 
 
 ```yaml
 spring:
@@ -278,28 +343,28 @@ spring:
     password: ${RABBITMQ_PASSWORD}
 ```
 
-## 5️⃣ Executar
+### 5️⃣ Executar
 
 ```bash
 mvn spring-boot:run
 ```
 
-## 🔍 Notas sobre o ambiente
+### 🔍 Notas sobre o ambiente
 
 > ⚠️ O **docker-compose** é destinado apenas para ambiente local de desenvolvimento.  
 > Em produção, a aplicação utiliza AWS (EC2 + RDS) e RabbitMQ via CloudAMQP.
 
 ---
 
-## 📚 Documentação da API
+# 📚 Documentação da API
 
 A documentação interativa da API está disponível via **Swagger**:
 
-👉 http://34.207.210.137:8080/swagger-ui/index.html
+👉 [Acessar Swagger](http://34.207.210.137:8080/swagger-ui/index.html)
 
 ---
 
-## ☁️ Deploy
+# ☁️ Deploy
 
 Aplicação deployada utilizando:
 - AWS EC2 (aplicação)
@@ -308,7 +373,7 @@ Aplicação deployada utilizando:
 
 ---
 
-## 🚀 Diferenciais do projeto
+# 🚀 Diferenciais do projeto
 
 - Arquitetura modular inspirada em **DDD**
 - Sistema orientado a eventos (event-driven)
@@ -320,7 +385,7 @@ Aplicação deployada utilizando:
 
 ---
 
-## 👨‍💻 Autor
+# 👨‍💻 Autor
 
 **Lucas Vieira**
 Estudante de Engenharia de Computação – UFC Sobral
