@@ -356,9 +356,16 @@ mvn spring-boot:run
 
 # 📚 Documentação da API
 
-A documentação interativa da API está disponível via **Swagger**:
+A documentação interativa da API está disponível via **Swagger**.
 
-👉 [Acessar Swagger](http://34.207.210.137:8080/swagger-ui/index.html)
+> ⚠️ **Importante:** O projeto já foi implantado na nuvem (AWS), porém a instância foi desativada para evitar custos de infraestrutura.  
+> Atualmente, a documentação Swagger está disponível **apenas em ambiente local**.
+
+### 🔧 Como acessar localmente
+
+Após iniciar a aplicação, acesse:
+
+👉 http://localhost:8080/swagger-ui/index.html
 
 ---
 
